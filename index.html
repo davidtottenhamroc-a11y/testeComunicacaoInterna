@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Softcom Connect - Comunicação interna corporativa"
+  />
+  <title>Softcom Connect</title>
+
+  <style>
+    /* =========================================================
+       VARIÁVEIS DA MARCA
+       Altere as cores abaixo para personalizar a identidade
+       visual da Softcom em um único lugar.
+       ========================================================= */
+    :root {
+      --softcom-primary: #0b4a8b;
+      --softcom-primary-dark: #003366;
+      --softcom-accent: #00a8e8;
+      --softcom-accent-light: #00c2ff;
+
+      --sidebar-bg: #0f172a;
+      --channel-bg: #1e293b;
+      --channel-bg-hover: #26364d;
+      --channel-active: #334155;
+
+      --main-bg: #f8fafc;
+      --message-hover: #eef2f7;
+      --input-bg: #ffffff;
+
+      --text-dark: #1e293b;
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.12);
+
+      --server-width: 76px;
+      --channels-width: 250px;
+      --header-height: 68px;
+      --profile-height: 72px;
+    }
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: var(--main-bg);
+      color: var(--text-dark);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       SCROLLBAR PERSONALIZADA
+       ========================================================= */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #64748b;
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* =========================================================
+       APP
+       ========================================================= */
+    .app {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      min-height: 500px;
+    }
+
+    /* =========================================================
+       1. BARRA DE SERVIDORES / SETORES
+       ========================================================= */
+    .server-sidebar {
+      width: var(--server-width);
+      flex: 0 0 var(--server-width);
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 0;
+      gap: 10px;
+      overflow-y: auto;
+      z-index: 30;
+    }
+
+    .brand-icon,
+    .server-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      transition:
+        border-radius 0.2s,
+        transform 0.2s,
+        background 0.2s;
+      position: relative;
+    }
+
+    .brand-icon {
+      background: linear-gradient(
+        135deg,
+        var(--softcom-primary),
+        var(--softcom-accent)
+      );
+      border-radius: 15px;
+      font-size: 18px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 5px;
+    }
+
+    .server-icon {
+      background: #263449;
+      color: #cbd5e1;
+    }
+
+    .server-icon:hover {
+      background: var(--softcom-primary);
+      border-radius: 15px;
+      transform: translateY(-1px);
+    }
+
+    .server-icon.active {
+      background: var(--softcom-accent);
+      color: white;
+      border-radius: 15px;
+    }
+
+    .server-icon::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      width: 4px;
+      height: 0;
+      background: white;
+      border-radius: 0 5px 5px 0;
+      transition: height 0.2s;
+    }
+
+    .server-icon.active::before {
+      height: 30px;
+    }
+
+    .server-divider {
+      width: 34px;
+      height: 1px;
+      background: #334155;
+      margin: 3px 0;
+    }
+
+    .server-spacer {
+      flex: 1;
+    }
+
+    .server-icon.status-icon {
+      background: #1e293b;
+      font-size: 19px;
+    }
+
+    /* =========================================================
+       2. PAINEL DE CANAIS
+       ========================================================= */
+    .channels-sidebar {
+      width: var(--channels-width);
+      flex: 0 0 var(--channels-width);
+      background: var(--channel-bg);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      z-index: 20;
+    }
+
+    .company-header {
+      height: var(--header-height);
+      min-height: var(--header-height);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .company-info {
+      min-width: 0;
+    }
+
+    .company-name {
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .company-unit {
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .header-menu {
+      width: 30px;
+      height: 30px;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      font-size: 18px;
+    }
+
+    .header-menu:hover {
+      background: var(--channel-bg-hover);
+      color: white;
+    }
+
+    .channels-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 9px;
+    }
+
+    .category {
+      margin-bottom: 17px;
+    }
+
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 7px 7px;
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    .category-title .arrow {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+
+    .category.collapsed .arrow {
+      transform: rotate(-90deg);
+    }
+
+    .category.collapsed .channel-list {
+      display: none;
+    }
+
+    .channel {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 9px;
+      margin: 2px 0;
+      border-radius: var(--radius-sm);
+      color: #94a3b8;
+      background: transparent;
+      text-align: left;
+      transition:
+        background 0.15s,
+        color 0.15s;
+    }
+
+    .channel:hover {
+      background: var(--channel-bg-hover);
+      color: #e2e8f0;
+    }
+
+    .channel.active {
+      background: var(--channel-active);
+      color: white;
+    }
+
+    .channel-icon {
+      width: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .channel.active .channel-icon,
+    .channel:hover .channel-icon {
+      color: var(--softcom-accent-light);
+    }
+
+    .channel-name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 13px;
+    }
+
+    .channel-badge {
+      margin-left: auto;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: var(--softcom-accent);
+      color: white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .profile-panel {
+      height: var(--profile-height);
+      min-height: var(--profile-height);
+      background: #172235;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      border-radius: 50%;
+      background: linear-gradient(
+        135deg,
+        var(--softcom-primary),
+        var(--softcom-accent)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .avatar-status {
+      position: absolute;
+      right: -1px;
+      bottom: -1px;
+      width: 12px;
+      height: 12px;
+      border: 3px solid #172235;
+      background: var(--success);
+      border-radius: 50%;
+    }
+
+    .profile-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .profile-name {
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-role {
+      color: var(--text-muted);
+      font-size: 10px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 2px;
+    }
+
+    .profile-action {
+      width: 27px;
+      height: 27px;
+      background: transparent;
+      color: #94a3b8;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .profile-action:hover {
+      background: #26364d;
+      color: white;
+    }
+
+    /* =========================================================
+       3. ÁREA PRINCIPAL
+       ========================================================= */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--main-bg);
+    }
+
+    .chat-header {
+      height: var(--header-height);
+      min-height: var(--header-height);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      z-index: 10;
+    }
+
+    .mobile-menu {
+      display: none;
+      width: 36px;
+      height: 36px;
+      background: #eef2f7;
+      border-radius: var(--radius-sm);
+      color: var(--text-dark);
+      font-size: 18px;
+    }
+
+    .chat-channel-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: #e6f7fd;
+      color: var(--softcom-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .chat-title-area {
+      min-width: 0;
+    }
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .chat-title-symbol {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .chat-description {
+      color: #64748b;
+      font-size: 11px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 5px;
+    }
+
+    .chat-action {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: #64748b;
+      font-size: 17px;
+    }
+
+    .chat-action:hover {
+      background: #eef2f7;
+      color: var(--softcom-primary);
+    }
+
+    /* =========================================================
+       FEED
+       ========================================================= */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px 24px;
+      scroll-behavior: smooth;
+    }
+
+    .channel-intro {
+      padding: 12px 0 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .channel-intro-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: #e6f7fd;
+      color: var(--softcom-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 27px;
+      margin-bottom: 10px;
+    }
+
+    .channel-intro h1 {
+      font-size: 24px;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .channel-intro p {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      padding: 10px 9px;
+      margin: 0 -9px;
+      border-radius: var(--radius-md);
+      transition: background 0.15s;
+    }
+
+    .message:hover {
+      background: var(--message-hover);
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex: 0 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      background: linear-gradient(
+        135deg,
+        var(--softcom-primary),
+        var(--softcom-accent)
+      );
+    }
+
+    .message-avatar.green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+    }
+
+    .message-avatar.orange {
+      background: linear-gradient(135deg, #b45309, #f59e0b);
+    }
+
+    .message-avatar.purple {
+      background: linear-gradient(135deg, #6d28d9, #a855f7);
+    }
+
+    .message-body {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .message-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .message-author {
+      color: var(--text-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .message-role {
+      color: var(--softcom-primary);
+      font-size: 9px;
+      font-weight: 700;
+      background: #e6f0f9;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .message-time {
+      color: #94a3b8;
+      font-size: 10px;
+    }
+
+    .message-text {
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .message-attachment {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      max-width: 390px;
+      margin-top: 9px;
+      padding: 10px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    .attachment-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 8px;
+      background: #e6f7fd;
+      color: var(--softcom-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attachment-info {
+      min-width: 0;
+    }
+
+    .attachment-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .attachment-size {
+      color: #94a3b8;
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    /* =========================================================
+       COMPOSER
+       ========================================================= */
+    .composer-area {
+      padding: 10px 20px 16px;
+      background: var(--main-bg);
+    }
+
+    .composer {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 9px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .composer:focus-within {
+      border-color: rgba(0, 168, 232, 0.55);
+      box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.08);
+    }
+
+    .composer-button {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border-radius: 8px;
+      background: transparent;
+      color: #64748b;
+      font-size: 19px;
+    }
+
+    .composer-button:hover {
+      color: var(--softcom-primary);
+      background: #eef2f7;
+    }
+
+    .message-input {
+      flex: 1;
+      min-width: 0;
+      height: 36px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text-dark);
+      font-size: 13px;
+    }
+
+    .message-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .send-button {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      border-radius: 10px;
+      color: white;
+      background: var(--softcom-primary);
+      font-size: 16px;
+      transition:
+        background 0.2s,
+        transform 0.2s;
+    }
+
+    .send-button:hover {
+      background: var(--softcom-accent);
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       STATUS MENU
+       ========================================================= */
+    .status-menu {
+      position: fixed;
+      left: 12px;
+      bottom: 82px;
+      width: 170px;
+      padding: 7px;
+      background: #172235;
+      border: 1px solid #334155;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+      display: none;
+    }
+
+    .status-menu.open {
+      display: block;
+    }
+
+    .status-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      background: transparent;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .status-option:hover {
+      background: #26364d;
+      color: white;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .status-dot.busy {
+      background: var(--danger);
+    }
+
+    .status-dot.away {
+      background: var(--warning);
+    }
+
+    /* =========================================================
+       RESPONSIVIDADE
+       ========================================================= */
+
+    /* Tablets */
+    @media (max-width: 900px) {
+      :root {
+        --channels-width: 220px;
+      }
+
+      .chat-header-actions .hide-tablet {
+        display: none;
+      }
+
+      .messages {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .composer-area {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+      html,
+      body {
+        overflow: hidden;
+      }
+
+      .server-sidebar {
+        width: 60px;
+        flex-basis: 60px;
+      }
+
+      .brand-icon,
+      .server-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .server-icon::before {
+        left: -10px;
+      }
+
+      .channels-sidebar {
+        position: fixed;
+        left: 60px;
+        top: 0;
+        bottom: 0;
+        width: min(82vw, 280px);
+        transform: translateX(-110%);
+        transition: transform 0.25s ease;
+        box-shadow: 12px 0 30px rgba(0, 0, 0, 0.22);
+      }
+
+      .channels-sidebar.mobile-open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .chat-header {
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .chat-description {
+        max-width: 180px;
+      }
+
+      .chat-header-actions {
+        gap: 0;
+      }
+
+      .chat-action:nth-child(1),
+      .chat-action:nth-child(2) {
+        display: none;
+      }
+
+      .messages {
+        padding: 14px 12px 20px;
+      }
+
+      .channel-intro h1 {
+        font-size: 21px;
+      }
+
+      .message {
+        gap: 9px;
+      }
+
+      .message-avatar {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+      }
+
+      .message-role {
+        display: none;
+      }
+
+      .composer-area {
+        padding: 7px 9px 10px;
+      }
+
+      .composer {
+        min-height: 48px;
+      }
+
+      .composer-button:nth-of-type(2) {
+        display: none;
+      }
+    }
+
+    /* Mobile pequeno */
+    @media (max-width: 480px) {
+      .server-sidebar {
+        width: 52px;
+        flex-basis: 52px;
+      }
+
+      .brand-icon,
+      .server-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 11px;
+      }
+
+      .brand-icon {
+        font-size: 15px;
+      }
+
+      .channels-sidebar {
+        left: 52px;
+      }
+
+      .chat-title {
+        font-size: 14px;
+      }
+
+      .chat-channel-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 17px;
+      }
+
+      .chat-header-actions {
+        display: none;
+      }
+
+      .message-text {
+        font-size: 12px;
+      }
+
+      .message-input {
+        font-size: 12px;
+      }
+    }
+
+    /* =========================================================
+       OVERLAY MOBILE
+       ========================================================= */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 15;
+      display: none;
+    }
+
+    .mobile-overlay.visible {
+      display: block;
+    }
+
+    @media (min-width: 701px) {
+      .mobile-overlay {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- =======================================================
+         BARRA LATERAL DE SETORES
+         ======================================================= -->
+    <aside class="server-sidebar" aria-label="Setores da empresa">
+
+      <button class="brand-icon" title="Softcom Connect" aria-label="Softcom">
+        SC
+      </button>
+
+      <div class="server-divider"></div>
+
+      <button class="server-icon active" title="Geral">G</button>
+      <button class="server-icon" title="Tecnologia">TI</button>
+      <button class="server-icon" title="Suporte">S</button>
+      <button class="server-icon" title="Comercial">C</button>
+      <button class="server-icon" title="Recursos Humanos">RH</button>
+
+      <div class="server-spacer"></div>
+
+      <button
+        class="server-icon status-icon"
+        id="statusButton"
+        title="Alterar status"
+        aria-label="Alterar status"
+      >
+        ●
+      </button>
+
+    </aside>
+
+    <!-- =======================================================
+         PAINEL DE CANAIS
+         ======================================================= -->
+    <aside class="channels-sidebar" id="channelsSidebar">
+
+      <header class="company-header">
+        <div class="company-info">
+          <div class="company-name">Softcom • João Pessoa</div>
+          <div class="company-unit">Comunicação Interna</div>
+        </div>
+
+        <button class="header-menu" title="Mais opções">⋯</button>
+      </header>
+
+      <div class="channels-scroll">
+
+        <!-- Categoria Texto -->
+        <section class="category">
+
+          <div class="category-title">
+            <span class="arrow">▼</span>
+            <span>Canais de texto</span>
+          </div>
+
+          <div class="channel-list">
+
+            <button
+              class="channel active"
+              data-channel="avisos-gerais"
+              data-title="avisos-gerais"
+              data-description="Comunicados oficiais, novidades e informações importantes da Softcom."
+            >
+              <span class="channel-icon">#</span>
+              <span class="channel-name">avisos-gerais</span>
+              <span class="channel-badge">3</span>
+            </button>
+
+            <button
+              class="channel"
+              data-channel="projetos"
+              data-title="projetos"
+              data-description="Acompanhe os projetos, entregas e iniciativas em andamento."
+            >
+              <span class="channel-icon">#</span>
+              <span class="channel-name">projetos</span>
+            </button>
+
+            <button
+              class="channel"
+              data-channel="suporte"
+              data-title="suporte"
+              data-description="Alinhamentos e comunicação da equipe de suporte."
+            >
+              <span class="channel-icon">#</span>
+              <span class="channel-name">suporte</span>
+              <span class="channel-badge">7</span>
+            </button>
+
+            <button
+              class="channel"
+              data-channel="comercial"
+              data-title="comercial"
+              data-description="Oportunidades, negociações e informações comerciais."
+            >
+              <span class="channel-icon">#</span>
+              <span class="channel-name">comercial</span>
+            </button>
+
+            <button
+              class="channel"
+              data-channel="rh"
+              data-title="rh"
+              data-description="Informações, comunicados e iniciativas de pessoas."
+            >
+              <span class="channel-icon">#</span>
+              <span class="channel-name">rh</span>
+            </button>
+
+          </div>
+        </section>
+
+        <!-- Categoria Voz -->
+        <section class="category">
+
+          <div class="category-title">
+            <span class="arrow">▼</span>
+            <span>Canais de voz</span>
+          </div>
+
+          <div class="channel-list">
+
+            <button class="channel" data-title="Sala Reunião 1">
+              <span class="channel-icon">◉</span>
+              <span class="channel-name">Sala Reunião 1</span>
+            </button>
+
+            <button class="channel" data-title="Sala Reunião 2">
+              <span class="channel-icon">◉</span>
+              <span class="channel-name">Sala Reunião 2</span>
+            </button>
+
+            <button class="channel" data-title="Descompressão">
+              <span class="channel-icon">◉</span>
+              <span class="channel-name">Descompressão</span>
+              <span class="channel-badge">2</span>
+            </button>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Perfil do usuário -->
+      <footer class="profile-panel">
+
+        <div class="avatar">
+          MP
+          <span class="avatar-status"></span>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-name">Marcos Paulo</div>
+          <div class="profile-role">Desenvolvedor Front-end</div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="profile-action" title="Silenciar">♩</button>
+          <button class="profile-action" title="Desativar áudio">◉</button>
+          <button class="profile-action" title="Configurações">⚙</button>
+        </div>
+
+      </footer>
+
+    </aside>
+
+    <!-- Overlay usado no mobile -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- =======================================================
+         ÁREA CENTRAL
+         ======================================================= -->
+    <main class="main-content">
+
+      <!-- Cabeçalho do chat -->
+      <header class="chat-header">
+
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+          aria-label="Abrir canais"
+          title="Abrir canais"
+        >
+          ☰
+        </button>
+
+        <div class="chat-channel-icon">#</div>
+
+        <div class="chat-title-area">
+          <div class="chat-title">
+            <span class="chat-title-symbol">#</span>
+            <span id="currentChannelName">avisos-gerais</span>
+          </div>
+
+          <div class="chat-description" id="currentChannelDescription">
+            Comunicados oficiais, novidades e informações importantes da Softcom.
+          </div>
+        </div>
+
+        <div class="chat-header-actions">
+          <button class="chat-action hide-tablet" title="Notificações">
+            ♧
+          </button>
+
+          <button class="chat-action hide-tablet" title="Fixados">
+            ▣
+          </button>
+
+          <button class="chat-action" title="Pesquisar">
+            ⌕
+          </button>
+
+          <button class="chat-action" title="Membros">
+            ♙
+          </button>
+        </div>
+
+      </header>
+
+      <!-- =====================================================
+           FEED
+           ===================================================== -->
+      <section class="messages" id="messages">
+
+        <div class="channel-intro">
+          <div class="channel-intro-icon">#</div>
+
+          <h1>
+            Bem-vindo ao #avisos-gerais!
+          </h1>
+
+          <p>
+            Este é o início do canal. Aqui ficam os principais comunicados
+            internos da Softcom.
+          </p>
+        </div>
+
+        <!-- Mensagem 1 -->
+        <article class="message">
+
+          <div class="message-avatar">AM</div>
+
+          <div class="message-body">
+
+            <div class="message-meta">
+              <span class="message-author">Ana Martins</span>
+              <span class="message-role">RH</span>
+              <time class="message-time">Hoje às 09:12</time>
+            </div>
+
+            <p class="message-text">
+              Bom dia, pessoal! Lembrando que nossa reunião geral acontece
+              hoje às 16h. O encontro será realizado na Sala de Reunião 1
+              e também estará disponível pelo canal de voz.
+            </p>
+
+          </div>
+
+        </article>
+
+        <!-- Mensagem 2 -->
+        <article class="message">
+
+          <div class="message-avatar green">RC</div>
+
+          <div class="message-body">
+
+            <div class="message-meta">
+              <span class="message-author">Rafael Costa</span>
+              <span class="message-role">TI</span>
+              <time class="message-time">Hoje às 09:28</time>
+            </div>
+
+            <p class="message-text">
+              O novo processo de autenticação corporativa já está disponível.
+              Quem ainda não realizou a atualização pode seguir o procedimento
+              enviado por e-mail.
+            </p>
+
+          </div>
+
+        </article>
+
+        <!-- Mensagem 3 -->
+        <article class="message">
+
+          <div class="message-avatar orange">CL</div>
+
+          <div class="message-body">
+
+            <div class="message-meta">
+              <span class="message-author">Camila Lima</span>
+              <span class="message-role">Comercial</span>
+              <time class="message-time">Hoje às 10:04</time>
+            </div>
+
+            <p class="message-text">
+              Compartilhando a apresentação atualizada com os principais
+              indicadores comerciais do mês.
+            </p>
+
+            <div class="message-attachment">
+              <div class="attachment-icon">▣</div>
+
+              <div class="attachment-info">
+                <div class="attachment-name">
+                  indicadores-comercial-agosto.pdf
+                </div>
+
+                <div class="attachment-size">
+                  PDF • 2,4 MB
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- Mensagem 4 -->
+        <article class="message">
+
+          <div class="message-avatar purple">JP</div>
+
+          <div class="message-body">
+
+            <div class="message-meta">
+              <span class="message-author">João Pedro</span>
+              <span class="message-role">Produto</span>
+              <time class="message-time">Hoje às 10:37</time>
+            </div>
+
+            <p class="message-text">
+              Excelente! Também finalizamos a primeira etapa do novo painel
+              administrativo. Assim que validarmos com QA, compartilho a
+              atualização no canal #projetos.
+            </p>
+
+          </div>
+
+        </article>
+
+      </section>
+
+      <!-- =====================================================
+           COMPOSITOR DE MENSAGEM
+           ===================================================== -->
+      <footer class="composer-area">
+
+        <form class="composer" id="messageForm">
+
+          <button
+            type="button"
+            class="composer-button"
+            title="Adicionar anexo"
+            aria-label="Adicionar anexo"
+          >
+            +
+          </button>
+
+          <input
+            id="messageInput"
+            class="message-input"
+            type="text"
+            autocomplete="off"
+            placeholder="Enviar mensagem em #avisos-gerais"
+            aria-label="Mensagem"
+          />
+
+          <button
+            type="button"
+            class="composer-button"
+            title="Adicionar emoji"
+            aria-label="Adicionar emoji"
+            id="emojiButton"
+          >
+            ☺
+          </button>
+
+          <button
+            type="submit"
+            class="send-button"
+            title="Enviar mensagem"
+            aria-label="Enviar mensagem"
+          >
+            ➤
+          </button>
+
+        </form>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- =========================================================
+       MENU DE STATUS
+       ========================================================= -->
+  <div class="status-menu" id="statusMenu">
+
+    <button class="status-option" data-status="online">
+      <span class="status-dot"></span>
+      Online
+    </button>
+
+    <button class="status-option" data-status="busy">
+      <span class="status-dot busy"></span>
+      Ocupado
+    </button>
+
+    <button class="status-option" data-status="away">
+      <span class="status-dot away"></span>
+      Ausente
+    </button>
+
+  </div>
+
+  <script>
+    /* =========================================================
+       TROCA DE CANAIS
+       ========================================================= */
+
+    const channels = document.querySelectorAll(".channel");
+    const currentChannelName =
+      document.getElementById("currentChannelName");
+    const currentChannelDescription =
+      document.getElementById("currentChannelDescription");
+    const messageInput =
+      document.getElementById("messageInput");
+
+    channels.forEach((channel) => {
+      channel.addEventListener("click", () => {
+
+        channels.forEach((item) => {
+          item.classList.remove("active");
+        });
+
+        channel.classList.add("active");
+
+        const title =
+          channel.dataset.title || channel.textContent.trim();
+
+        const description =
+          channel.dataset.description ||
+          "Canal corporativo para comunicação e colaboração entre equipes.";
+
+        currentChannelName.textContent = title;
+        currentChannelDescription.textContent = description;
+
+        messageInput.placeholder =
+          `Enviar mensagem em #${title}`;
+
+        closeMobileMenu();
+      });
+    });
+
+
+    /* =========================================================
+       CATEGORIAS EXPANSÍVEIS
+       ========================================================= */
+
+    document.querySelectorAll(".category-title").forEach((title) => {
+      title.addEventListener("click", () => {
+        title.parentElement.classList.toggle("collapsed");
+      });
+    });
+
+
+    /* =========================================================
+       ENVIO DE MENSAGEM
+       ========================================================= */
+
+    const messageForm =
+      document.getElementById("messageForm");
+
+    const messages =
+      document.getElementById("messages");
+
+    messageForm.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+      const text = messageInput.value.trim();
+
+      if (!text) return;
+
+      const message = document.createElement("article");
+
+      message.className = "message";
+
+      message.innerHTML = `
+        <div class="message-avatar">MP</div>
+
+        <div class="message-body">
+          <div class="message-meta">
+            <span class="message-author">Marcos Paulo</span>
+            <span class="message-role">Você</span>
+            <time class="message-time">Agora</time>
+          </div>
+
+          <p class="message-text"></p>
+        </div>
+      `;
+
+      message.querySelector(".message-text").textContent = text;
+
+      messages.appendChild(message);
+
+      messageInput.value = "";
+
+      messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+      });
+    });
+
+
+    /* =========================================================
+       EMOJI
+       ========================================================= */
+
+    document
+      .getElementById("emojiButton")
+      .addEventListener("click", () => {
+
+        const emojis = ["😀", "👍", "🚀", "🎉", "👏", "💙"];
+        const emoji =
+          emojis[Math.floor(Math.random() * emojis.length)];
+
+        messageInput.value += emoji;
+        messageInput.focus();
+      });
+
+
+    /* =========================================================
+       STATUS DO USUÁRIO
+       ========================================================= */
+
+    const statusButton =
+      document.getElementById("statusButton");
+
+    const statusMenu =
+      document.getElementById("statusMenu");
+
+    statusButton.addEventListener("click", () => {
+      statusMenu.classList.toggle("open");
+    });
+
+    document.querySelectorAll(".status-option").forEach((option) => {
+
+      option.addEventListener("click", () => {
+
+        const status =
+          option.dataset.status;
+
+        const colors = {
+          online: "var(--success)",
+          busy: "var(--danger)",
+          away: "var(--warning)"
+        };
+
+        statusButton.style.color = colors[status];
+
+        statusMenu.classList.remove("open");
+      });
+
+    });
+
+
+    /* =========================================================
+       MENU MOBILE
+       ========================================================= */
+
+    const mobileMenu =
+      document.getElementById("mobileMenu");
+
+    const channelsSidebar =
+      document.getElementById("channelsSidebar");
+
+    const mobileOverlay =
+      document.getElementById("mobileOverlay");
+
+    function openMobileMenu() {
+      channelsSidebar.classList.add("mobile-open");
+      mobileOverlay.classList.add("visible");
+    }
+
+    function closeMobileMenu() {
+      channelsSidebar.classList.remove("mobile-open");
+      mobileOverlay.classList.remove("visible");
+    }
+
+    mobileMenu.addEventListener("click", openMobileMenu);
+
+    mobileOverlay.addEventListener("click", closeMobileMenu);
+
+
+    /* =========================================================
+       FECHAR MENUS AO CLICAR FORA
+       ========================================================= */
+
+    document.addEventListener("click", (event) => {
+
+      if (
+        !statusMenu.contains(event.target) &&
+        !statusButton.contains(event.target)
+      ) {
+        statusMenu.classList.remove("open");
+      }
+
+    });
+
+
+    /* =========================================================
+       TECLA ESC
+       ========================================================= */
+
+    document.addEventListener("keydown", (event) => {
+
+      if (event.key === "Escape") {
+        closeMobileMenu();
+        statusMenu.classList.remove("open");
+      }
+
+    });
+  </script>
+
+</body>
+</html>
