@@ -1,2043 +1,3420 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Softcom Connect</title>
-
-  <style>
-    /* =========================================================
-       CORES DA MARCA
-       Altere as variáveis abaixo para modificar toda a identidade
-       visual da aplicação.
-       ========================================================= */
-
-    :root {
-      --softcom-primary: #0B4A8B;
-      --softcom-primary-dark: #003366;
-
-      --softcom-accent: #00A8E8;
-      --softcom-accent-light: #00C2FF;
-
-      --sidebar-bg: #0F172A;
-      --channel-bg: #1E293B;
-      --channel-hover: #26364D;
-      --channel-active: #334155;
-
-      --main-bg: #F8FAFC;
-      --white: #FFFFFF;
-
-      --text-primary: #1E293B;
-      --text-secondary: #64748B;
-      --text-light: #CBD5E1;
-      --text-muted: #94A3B8;
-
-      --border: #E2E8F0;
-
-      --success: #22C55E;
-      --danger: #EF4444;
-
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
-
-      --shadow: 0 8px 30px rgba(15, 23, 42, 0.15);
-    }
-
-    /* =========================================================
-       RESET
-       ========================================================= */
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-      background: var(--main-bg);
-      color: var(--text-primary);
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       SCROLLBAR
-       ========================================================= */
-
-    ::-webkit-scrollbar {
-      width: 7px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #64748B;
-      border-radius: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softcom Connect</title>
+
+<style>
+/* =========================================================
+   CORES DA MARCA
+   Altere somente estas variáveis para trocar a identidade
+   visual da aplicação.
+   ========================================================= */
+
+:root {
+  --primary: #0B4A8B;
+  --primary-dark: #003366;
+  --accent: #00A8E8;
+  --accent-light: #00C2FF;
+
+  --sidebar: #0F172A;
+  --sidebar-2: #1E293B;
+  --sidebar-hover: #26364D;
+  --sidebar-active: #334155;
+
+  --background: #F8FAFC;
+  --white: #FFFFFF;
+
+  --text: #1E293B;
+  --muted: #64748B;
+  --light-muted: #94A3B8;
+
+  --border: #E2E8F0;
+
+  --success: #22C55E;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+
+  --radius: 10px;
+  --shadow: 0 10px 35px rgba(15,23,42,.16);
+}
+
+/* RESET */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: var(--background);
+  color: var(--text);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #64748B;
+  border-radius: 20px;
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
 
-    /* =========================================================
-       ESTRUTURA
-       ========================================================= */
+.login-screen {
+  min-height: 100vh;
 
-    .app {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    /* =========================================================
-       SIDEBAR DOS SETORES
-       ========================================================= */
+  padding: 20px;
 
-    .server-sidebar {
-      width: 76px;
-      min-width: 76px;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(0,168,232,.18),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #003366,
+      #0B4A8B 50%,
+      #071426
+    );
+}
 
-      background: var(--sidebar-bg);
+.login-card {
+  width: 100%;
+  max-width: 420px;
 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+  padding: 38px;
 
-      padding: 14px 0;
-      gap: 10px;
-    }
+  background: rgba(255,255,255,.98);
 
-    .brand {
-      width: 48px;
-      height: 48px;
+  border-radius: 20px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  box-shadow: var(--shadow);
+}
 
-      border-radius: 14px;
+.login-logo {
+  width: 64px;
+  height: 64px;
 
-      background:
-        linear-gradient(
-          135deg,
-          var(--softcom-primary),
-          var(--softcom-accent)
-        );
+  margin: 0 auto 18px;
 
-      color: white;
-      font-weight: 800;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .server {
-      width: 48px;
-      height: 48px;
+  border-radius: 18px;
 
-      border-radius: 50%;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--accent)
+    );
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  color: white;
 
-      background: #263449;
-      color: #CBD5E1;
+  font-size: 20px;
+  font-weight: 900;
+}
 
-      font-size: 12px;
-      font-weight: 700;
+.login-title {
+  text-align: center;
 
-      transition: .2s;
-    }
+  font-size: 25px;
+  font-weight: 900;
+}
 
-    .server:hover,
-    .server.active {
-      background: var(--softcom-accent);
-      color: white;
-      border-radius: 14px;
-    }
+.login-subtitle {
+  margin: 7px 0 28px;
 
-    .spacer {
-      flex: 1;
-    }
+  text-align: center;
 
-    /* =========================================================
-       SIDEBAR DE CANAIS
-       ========================================================= */
+  color: var(--muted);
 
-    .channels-sidebar {
-      width: 270px;
-      min-width: 270px;
+  font-size: 13px;
+}
 
-      display: flex;
-      flex-direction: column;
+.form-group {
+  margin-bottom: 16px;
+}
 
-      background: var(--channel-bg);
-      color: white;
-    }
+.form-group label {
+  display: block;
 
-    .company-header {
-      height: 68px;
+  margin-bottom: 7px;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  font-size: 12px;
+  font-weight: 800;
+}
 
-      padding: 0 16px;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
 
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
+  padding: 12px 13px;
 
-    .company-name {
-      font-size: 15px;
-      font-weight: 800;
-    }
+  border: 1px solid var(--border);
 
-    .company-subtitle {
-      margin-top: 3px;
+  border-radius: 9px;
 
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+  outline: none;
 
-    .channels-content {
-      flex: 1;
+  background: #F8FAFC;
 
-      overflow-y: auto;
+  color: var(--text);
 
-      padding: 15px 9px;
-    }
+  font-size: 13px;
+}
 
-    .category {
-      margin-bottom: 20px;
-    }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
 
-    .category-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  box-shadow:
+    0 0 0 3px rgba(0,168,232,.1);
+}
 
-      padding: 0 7px 8px;
-    }
+.login-button {
+  width: 100%;
 
-    .category-title {
-      color: var(--text-light);
+  padding: 13px;
 
-      font-size: 11px;
-      font-weight: 800;
+  border-radius: 9px;
 
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
+  background: var(--primary);
 
-    .add-channel {
-      width: 25px;
-      height: 25px;
+  color: white;
 
-      border-radius: 6px;
+  font-size: 13px;
+  font-weight: 800;
 
-      background: transparent;
-      color: var(--text-muted);
+  transition: .2s;
+}
 
-      font-size: 19px;
-    }
+.login-button:hover {
+  background: var(--accent);
+}
 
-    .add-channel:hover {
-      background: var(--channel-hover);
-      color: white;
-    }
+.login-error {
+  margin-top: 12px;
 
-    .channel {
-      width: 100%;
+  padding: 10px;
 
-      display: flex;
-      align-items: center;
+  border-radius: 8px;
 
-      gap: 9px;
+  background: #FEF2F2;
 
-      padding: 8px 9px;
-      margin-bottom: 2px;
+  color: #B91C1C;
 
-      border-radius: 7px;
+  font-size: 12px;
 
-      background: transparent;
-      color: var(--text-muted);
+  text-align: center;
+}
 
-      text-align: left;
-    }
+/* =========================================================
+   APP
+   ========================================================= */
 
-    .channel:hover {
-      background: var(--channel-hover);
-      color: white;
-    }
+.app {
+  width: 100%;
+  height: 100vh;
 
-    .channel.active {
-      background: var(--channel-active);
-      color: white;
-    }
+  display: flex;
 
-    .channel-icon {
-      width: 20px;
+  overflow: hidden;
+}
 
-      color: var(--softcom-accent);
-      font-size: 18px;
+/* =========================================================
+   SERVIDORES
+   ========================================================= */
 
-      text-align: center;
-    }
+.server-sidebar {
+  width: 72px;
+  min-width: 72px;
 
-    .channel-name {
-      flex: 1;
+  padding: 13px 0;
 
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-      font-size: 13px;
-    }
+  gap: 10px;
 
-    .channel-delete {
-      opacity: 0;
+  background: var(--sidebar);
+}
 
-      color: #94A3B8;
-      background: transparent;
+.brand {
+  width: 46px;
+  height: 46px;
 
-      font-size: 14px;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .channel:hover .channel-delete {
-      opacity: 1;
-    }
+  border-radius: 14px;
 
-    .channel-delete:hover {
-      color: var(--danger);
-    }
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--accent)
+    );
 
-    /* =========================================================
-       ESTADO VAZIO
-       ========================================================= */
+  color: white;
 
-    .empty-channels {
-      padding: 30px 15px;
+  font-size: 14px;
+  font-weight: 900;
+}
 
-      text-align: center;
+.server {
+  width: 44px;
+  height: 44px;
 
-      color: var(--text-muted);
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .empty-icon {
-      width: 45px;
-      height: 45px;
+  border-radius: 50%;
 
-      margin: 0 auto 10px;
+  background: #263449;
 
-      border-radius: 12px;
+  color: #CBD5E1;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
 
-      background: #26364D;
+  transition: .2s;
+}
 
-      color: var(--softcom-accent);
+.server:hover,
+.server.active {
+  background: var(--accent);
 
-      font-size: 22px;
-    }
+  color: white;
 
-    .empty-channels strong {
-      display: block;
+  border-radius: 14px;
+}
 
-      margin-bottom: 5px;
+.server-spacer {
+  flex: 1;
+}
 
-      color: #CBD5E1;
+/* =========================================================
+   CANAIS
+   ========================================================= */
 
-      font-size: 12px;
-    }
+.channels-sidebar {
+  width: 270px;
+  min-width: 270px;
 
-    .empty-channels span {
-      display: block;
+  display: flex;
+  flex-direction: column;
 
-      font-size: 11px;
-      line-height: 1.5;
-    }
+  background: var(--sidebar-2);
 
-    /* =========================================================
-       PERFIL
-       ========================================================= */
+  color: white;
+}
 
-    .profile {
-      height: 72px;
+.company-header {
+  min-height: 68px;
 
-      display: flex;
-      align-items: center;
+  padding: 12px 15px;
 
-      gap: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-      padding: 9px;
+  border-bottom:
+    1px solid rgba(255,255,255,.06);
+}
 
-      background: #172235;
+.company-name {
+  font-size: 15px;
+  font-weight: 900;
+}
 
-      border-top: 1px solid rgba(255,255,255,.05);
-    }
+.company-unit {
+  margin-top: 3px;
 
-    .avatar {
-      width: 40px;
-      height: 40px;
+  color: var(--light-muted);
 
-      flex-shrink: 0;
+  font-size: 10px;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.channel-scroll {
+  flex: 1;
 
-      border-radius: 50%;
+  overflow-y: auto;
 
-      background:
-        linear-gradient(
-          135deg,
-          var(--softcom-primary),
-          var(--softcom-accent)
-        );
+  padding: 15px 9px;
+}
 
-      color: white;
+.category {
+  margin-bottom: 20px;
+}
 
-      font-size: 12px;
-      font-weight: 800;
-    }
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    .profile-info {
-      flex: 1;
-      min-width: 0;
-    }
+  padding: 0 7px 8px;
+}
 
-    .profile-name {
-      color: white;
+.category-title {
+  color: #CBD5E1;
 
-      font-size: 12px;
-      font-weight: 700;
-    }
+  font-size: 10px;
+  font-weight: 900;
 
-    .profile-role {
-      margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
 
-      color: var(--text-muted);
+.add-button {
+  width: 25px;
+  height: 25px;
 
-      font-size: 10px;
-    }
+  border-radius: 6px;
 
-    /* =========================================================
-       ÁREA PRINCIPAL
-       ========================================================= */
+  background: transparent;
 
-    .main {
-      flex: 1;
+  color: var(--light-muted);
 
-      min-width: 0;
+  font-size: 18px;
+}
 
-      display: flex;
-      flex-direction: column;
+.add-button:hover {
+  background: var(--sidebar-hover);
 
-      background: var(--main-bg);
-    }
+  color: white;
+}
 
-    .chat-header {
-      height: 68px;
+.channel {
+  width: 100%;
 
-      display: flex;
-      align-items: center;
+  display: flex;
+  align-items: center;
 
-      gap: 12px;
+  gap: 8px;
 
-      padding: 0 20px;
+  padding: 8px 9px;
 
-      background: white;
+  margin-bottom: 2px;
 
-      border-bottom: 1px solid var(--border);
+  border-radius: 7px;
 
-      box-shadow:
-        0 2px 8px rgba(15,23,42,.05);
-    }
+  background: transparent;
 
-    .channel-symbol {
-      width: 38px;
-      height: 38px;
+  color: var(--light-muted);
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  text-align: left;
+}
 
-      border-radius: 9px;
+.channel:hover,
+.channel.active {
+  background: var(--sidebar-active);
 
-      background: #E6F7FD;
+  color: white;
+}
 
-      color: var(--softcom-accent);
+.channel-icon {
+  width: 20px;
 
-      font-size: 20px;
-    }
+  color: var(--accent);
 
-    .chat-info {
-      min-width: 0;
-    }
+  text-align: center;
 
-    .chat-name {
-      font-size: 16px;
-      font-weight: 800;
-    }
+  font-size: 17px;
+}
 
-    .chat-description {
-      margin-top: 3px;
+.channel-name {
+  flex: 1;
 
-      color: var(--text-secondary);
+  overflow: hidden;
 
-      font-size: 11px;
-    }
+  white-space: nowrap;
 
-    /* =========================================================
-       ESTADO VAZIO DO CHAT
-       ========================================================= */
+  text-overflow: ellipsis;
 
-    .empty-chat {
-      flex: 1;
+  font-size: 13px;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.delete-channel {
+  opacity: 0;
 
-      padding: 30px;
-    }
+  background: transparent;
 
-    .empty-chat-box {
-      max-width: 480px;
+  color: #94A3B8;
 
-      text-align: center;
-    }
+  font-size: 14px;
+}
 
-    .empty-chat-icon {
-      width: 72px;
-      height: 72px;
+.channel:hover .delete-channel {
+  opacity: 1;
+}
 
-      margin: 0 auto 18px;
+.delete-channel:hover {
+  color: var(--danger);
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.empty-category {
+  padding: 15px;
 
-      border-radius: 20px;
+  color: var(--light-muted);
 
-      background: #E6F7FD;
+  text-align: center;
 
-      color: var(--softcom-accent);
+  font-size: 11px;
+}
 
-      font-size: 34px;
-    }
+/* =========================================================
+   PERFIL
+   ========================================================= */
 
-    .empty-chat h1 {
-      margin-bottom: 8px;
+.profile {
+  min-height: 72px;
 
-      font-size: 23px;
-    }
+  padding: 9px;
 
-    .empty-chat p {
-      color: var(--text-secondary);
+  display: flex;
+  align-items: center;
 
-      font-size: 13px;
-      line-height: 1.6;
-    }
+  gap: 9px;
 
-    /* =========================================================
-       MENSAGENS
-       ========================================================= */
+  background: #172235;
 
-    .messages {
-      flex: 1;
+  border-top:
+    1px solid rgba(255,255,255,.05);
+}
 
-      overflow-y: auto;
+.avatar {
+  width: 40px;
+  height: 40px;
 
-      padding: 20px;
-    }
+  flex-shrink: 0;
 
-    .message {
-      display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      gap: 11px;
+  border-radius: 50%;
 
-      padding: 9px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--accent)
+    );
 
-      margin: 0 -9px;
+  color: white;
 
-      border-radius: 8px;
-    }
+  font-size: 11px;
+  font-weight: 900;
+}
 
-    .message:hover {
-      background: #EEF2F7;
-    }
+.profile-info {
+  flex: 1;
 
-    .message-avatar {
-      width: 40px;
-      height: 40px;
+  min-width: 0;
+}
 
-      flex-shrink: 0;
+.profile-name {
+  color: white;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+}
 
-      border-radius: 50%;
+.profile-role {
+  margin-top: 3px;
 
-      background:
-        linear-gradient(
-          135deg,
-          var(--softcom-primary),
-          var(--softcom-accent)
-        );
+  color: var(--light-muted);
 
-      color: white;
+  font-size: 10px;
+}
 
-      font-size: 12px;
-      font-weight: 800;
-    }
+.profile-buttons {
+  display: flex;
 
-    .message-content {
-      min-width: 0;
-    }
+  gap: 2px;
+}
 
-    .message-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.profile-button {
+  width: 28px;
+  height: 28px;
 
-    .message-author {
-      font-size: 13px;
-      font-weight: 800;
-    }
+  border-radius: 6px;
 
-    .message-time {
-      color: var(--text-muted);
-      font-size: 10px;
-    }
+  background: transparent;
 
-    .message-text {
-      margin-top: 4px;
+  color: #94A3B8;
+}
 
-      color: #475569;
+.profile-button:hover {
+  background: var(--sidebar-hover);
 
-      font-size: 13px;
-      line-height: 1.5;
-    }
+  color: white;
+}
 
-    /* =========================================================
-       COMPOSER
-       ========================================================= */
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-    .composer-area {
-      padding: 10px 20px 16px;
-    }
+.main {
+  flex: 1;
 
-    .composer {
-      display: flex;
-      align-items: center;
+  min-width: 0;
 
-      gap: 7px;
+  display: flex;
+  flex-direction: column;
 
-      padding: 6px 8px;
+  background: var(--background);
+}
 
-      background: white;
+.chat-header {
+  min-height: 68px;
 
-      border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
 
-      border-radius: var(--radius-lg);
+  gap: 12px;
 
-      box-shadow:
-        0 2px 8px rgba(15,23,42,.06);
-    }
+  padding: 0 20px;
 
-    .composer input {
-      flex: 1;
+  background: white;
 
-      min-width: 0;
+  border-bottom:
+    1px solid var(--border);
 
-      height: 36px;
+  box-shadow:
+    0 2px 8px rgba(15,23,42,.05);
+}
 
-      border: 0;
-      outline: 0;
+.mobile-menu {
+  display: none;
 
-      background: transparent;
+  width: 35px;
+  height: 35px;
 
-      color: var(--text-primary);
-    }
+  border-radius: 7px;
 
-    .composer input:disabled {
-      cursor: not-allowed;
-    }
+  background: #F1F5F9;
 
-    .composer-button {
-      width: 35px;
-      height: 35px;
+  color: var(--text);
+}
 
-      border-radius: 8px;
+.header-icon {
+  width: 38px;
+  height: 38px;
 
-      background: transparent;
-      color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      font-size: 18px;
-    }
+  border-radius: 9px;
 
-    .composer-button:hover {
-      background: #EEF2F7;
-      color: var(--softcom-primary);
-    }
+  background: #E6F7FD;
 
-    .send {
-      width: 38px;
-      height: 38px;
+  color: var(--accent);
 
-      border-radius: 9px;
+  font-size: 20px;
+}
 
-      background: var(--softcom-primary);
+.chat-info {
+  min-width: 0;
+}
 
-      color: white;
-    }
+.chat-name {
+  font-size: 16px;
+  font-weight: 900;
+}
 
-    .send:hover {
-      background: var(--softcom-accent);
-    }
+.chat-description {
+  margin-top: 3px;
 
-    /* =========================================================
-       MODAL
-       ========================================================= */
+  color: var(--muted);
 
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
+  font-size: 11px;
 
-      display: none;
-      align-items: center;
-      justify-content: center;
+  overflow: hidden;
 
-      padding: 20px;
+  text-overflow: ellipsis;
 
-      background: rgba(15,23,42,.65);
+  white-space: nowrap;
+}
 
-      z-index: 100;
-    }
+.header-actions {
+  margin-left: auto;
 
-    .modal-overlay.active {
-      display: flex;
-    }
+  display: flex;
 
-    .modal {
-      width: 100%;
-      max-width: 450px;
+  gap: 4px;
+}
 
-      padding: 22px;
+.header-button {
+  width: 34px;
+  height: 34px;
 
-      background: white;
+  border-radius: 7px;
 
-      border-radius: 16px;
+  background: transparent;
 
-      box-shadow: var(--shadow);
-    }
+  color: var(--muted);
+}
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+.header-button:hover {
+  background: #F1F5F9;
 
-      margin-bottom: 20px;
-    }
+  color: var(--primary);
+}
 
-    .modal-title {
-      font-size: 19px;
-      font-weight: 800;
-    }
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
 
-    .modal-subtitle {
-      margin-top: 5px;
+.messages {
+  flex: 1;
 
-      color: var(--text-secondary);
+  overflow-y: auto;
 
-      font-size: 12px;
-    }
+  padding: 20px;
+}
 
-    .close-modal {
-      width: 32px;
-      height: 32px;
+.empty-state {
+  height: 100%;
 
-      border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      background: #F1F5F9;
+  text-align: center;
+}
 
-      color: var(--text-secondary);
+.empty-state-box {
+  max-width: 470px;
+}
 
-      font-size: 18px;
-    }
+.empty-state-icon {
+  width: 70px;
+  height: 70px;
 
-    .field {
-      margin-bottom: 16px;
-    }
+  margin: 0 auto 18px;
 
-    .field label {
-      display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      margin-bottom: 7px;
+  border-radius: 20px;
 
-      color: var(--text-primary);
+  background: #E6F7FD;
 
-      font-size: 12px;
-      font-weight: 700;
-    }
+  color: var(--accent);
 
-    .field input,
-    .field textarea,
-    .field select {
-      width: 100%;
+  font-size: 32px;
+}
 
-      padding: 11px 12px;
+.empty-state h1 {
+  margin-bottom: 8px;
 
-      border: 1px solid var(--border);
+  font-size: 23px;
+}
 
-      border-radius: 8px;
+.empty-state p {
+  color: var(--muted);
 
-      outline: 0;
+  font-size: 13px;
 
-      background: #F8FAFC;
+  line-height: 1.6;
+}
 
-      color: var(--text-primary);
+/* MENSAGEM */
 
-      font-size: 13px;
-    }
+.message {
+  display: flex;
 
-    .field textarea {
-      min-height: 90px;
+  gap: 11px;
 
-      resize: vertical;
-    }
+  padding: 9px;
 
-    .field input:focus,
-    .field textarea:focus,
-    .field select:focus {
-      border-color: var(--softcom-accent);
-      box-shadow:
-        0 0 0 3px rgba(0,168,232,.1);
-    }
+  margin: 0 -9px;
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
+  border-radius: 8px;
+}
 
-      gap: 8px;
+.message:hover {
+  background: #EEF2F7;
+}
 
-      margin-top: 22px;
-    }
+.message-avatar {
+  width: 40px;
+  height: 40px;
 
-    .btn {
-      padding: 10px 15px;
+  flex-shrink: 0;
 
-      border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      font-size: 12px;
-      font-weight: 700;
-    }
+  border-radius: 50%;
 
-    .btn-cancel {
-      background: #F1F5F9;
-      color: var(--text-secondary);
-    }
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--accent)
+    );
 
-    .btn-create {
-      background: var(--softcom-primary);
-      color: white;
-    }
+  color: white;
 
-    .btn-create:hover {
-      background: var(--softcom-accent);
-    }
+  font-size: 11px;
+  font-weight: 900;
+}
 
-    /* =========================================================
-       RESPONSIVO
-       ========================================================= */
+.message-author {
+  font-size: 13px;
+  font-weight: 900;
+}
 
-    @media (max-width: 800px) {
+.message-time {
+  margin-left: 8px;
 
-      .server-sidebar {
-        width: 60px;
-        min-width: 60px;
-      }
+  color: var(--light-muted);
 
-      .server,
-      .brand {
-        width: 40px;
-        height: 40px;
-      }
+  font-size: 10px;
+}
 
-      .channels-sidebar {
-        position: fixed;
+.message-text {
+  margin-top: 4px;
 
-        left: 60px;
-        top: 0;
-        bottom: 0;
+  color: #475569;
 
-        z-index: 50;
+  font-size: 13px;
 
-        transform: translateX(-110%);
+  line-height: 1.5;
+}
 
-        transition: transform .25s ease;
+/* =========================================================
+   COMPOSER
+   ========================================================= */
 
-        box-shadow: var(--shadow);
-      }
+.composer-area {
+  padding: 10px 20px 16px;
+}
 
-      .channels-sidebar.open {
-        transform: translateX(0);
-      }
+.composer {
+  display: flex;
+  align-items: center;
 
-      .mobile-menu {
-        display: flex;
-      }
-    }
+  gap: 7px;
 
-    @media (min-width: 801px) {
-      .mobile-menu {
-        display: none;
-      }
-    }
+  padding: 6px 8px;
 
-    @media (max-width: 550px) {
+  background: white;
 
-      .server-sidebar {
-        width: 52px;
-        min-width: 52px;
-      }
+  border: 1px solid var(--border);
 
-      .server,
-      .brand {
-        width: 36px;
-        height: 36px;
-      }
+  border-radius: 14px;
 
-      .channels-sidebar {
-        left: 52px;
-        width: min(85vw, 280px);
-        min-width: 0;
-      }
+  box-shadow:
+    0 2px 8px rgba(15,23,42,.05);
+}
 
-      .chat-header {
-        padding: 0 12px;
-      }
+.composer input {
+  flex: 1;
 
-      .messages {
-        padding: 15px;
-      }
+  min-width: 0;
 
-      .composer-area {
-        padding: 8px;
-      }
-    }
-  </style>
+  height: 36px;
+
+  border: 0;
+
+  outline: 0;
+
+  color: var(--text);
+}
+
+.composer input:disabled {
+  cursor: not-allowed;
+}
+
+.composer-button {
+  width: 35px;
+  height: 35px;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--muted);
+
+  font-size: 18px;
+}
+
+.composer-button:hover {
+  background: #F1F5F9;
+
+  color: var(--primary);
+}
+
+.send-button {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 9px;
+
+  background: var(--primary);
+
+  color: white;
+}
+
+.send-button:hover {
+  background: var(--accent);
+}
+
+/* =========================================================
+   MODAIS
+   ========================================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15,23,42,.65);
+
+  z-index: 100;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+
+  max-width: 470px;
+
+  padding: 23px;
+
+  background: white;
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow);
+}
+
+.modal-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.modal-subtitle {
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.close {
+  width: 31px;
+  height: 31px;
+
+  border-radius: 7px;
+
+  background: #F1F5F9;
+
+  color: var(--muted);
+
+  font-size: 18px;
+}
+
+.modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 15px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.btn-secondary {
+  background: #F1F5F9;
+
+  color: var(--muted);
+}
+
+.btn-primary {
+  background: var(--primary);
+
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+}
+
+.btn-danger {
+  background: var(--danger);
+
+  color: white;
+}
+
+/* =========================================================
+   USUÁRIOS
+   ========================================================= */
+
+.user-list {
+  max-height: 300px;
+
+  overflow-y: auto;
+
+  margin-top: 15px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px;
+
+  margin-bottom: 5px;
+
+  border-radius: 8px;
+
+  background: #F8FAFC;
+}
+
+.user-item-info {
+  flex: 1;
+}
+
+.user-item-name {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.user-item-email {
+  margin-top: 2px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+}
+
+.admin-badge {
+  padding: 3px 6px;
+
+  border-radius: 5px;
+
+  background: #E6F7FD;
+
+  color: var(--primary);
+
+  font-size: 9px;
+  font-weight: 900;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .server-sidebar {
+    width: 58px;
+    min-width: 58px;
+  }
+
+  .server {
+    width: 39px;
+    height: 39px;
+  }
+
+  .brand {
+    width: 42px;
+    height: 42px;
+  }
+
+  .channels-sidebar {
+    position: fixed;
+
+    top: 0;
+    bottom: 0;
+    left: 58px;
+
+    z-index: 50;
+
+    transform: translateX(-110%);
+
+    transition: transform .25s;
+
+    box-shadow: var(--shadow);
+  }
+
+  .channels-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-actions {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .server-sidebar {
+    width: 52px;
+    min-width: 52px;
+  }
+
+  .channels-sidebar {
+    left: 52px;
+
+    width: min(85vw, 280px);
+    min-width: 0;
+  }
+
+  .messages {
+    padding: 14px;
+  }
+
+  .composer-area {
+    padding: 8px;
+  }
+
+  .login-card {
+    padding: 28px 22px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<!-- =========================================================
+     LOGIN
+     ========================================================= -->
 
-    <!-- =======================================================
-         SETORES
-         ======================================================= -->
+<section
+  id="loginScreen"
+  class="login-screen"
+>
 
-    <aside class="server-sidebar">
+  <div class="login-card">
 
-      <div class="brand">
-        SC
-      </div>
+    <div class="login-logo">
+      SC
+    </div>
 
-      <button class="server active">
-        G
-      </button>
+    <h1 class="login-title">
+      Softcom Connect
+    </h1>
 
-      <button class="server">
-        TI
-      </button>
+    <p class="login-subtitle">
+      Comunicação interna corporativa
+    </p>
 
-      <button class="server">
-        S
-      </button>
+    <form id="loginForm">
 
-      <button class="server">
-        C
-      </button>
+      <div class="form-group">
 
-      <button class="server">
-        RH
-      </button>
+        <label for="loginEmail">
+          E-mail
+        </label>
 
-      <div class="spacer"></div>
-
-      <button class="server">
-        ⚙
-      </button>
-
-    </aside>
-
-
-    <!-- =======================================================
-         CANAIS
-         ======================================================= -->
-
-    <aside class="channels-sidebar" id="channelsSidebar">
-
-      <header class="company-header">
-
-        <div>
-          <div class="company-name">
-            Softcom Connect
-          </div>
-
-          <div class="company-subtitle">
-            Comunicação Interna
-          </div>
-        </div>
-
-      </header>
-
-
-      <div class="channels-content">
-
-        <!-- CANAIS DE TEXTO -->
-
-        <section class="category">
-
-          <div class="category-header">
-
-            <span class="category-title">
-              Canais de texto
-            </span>
-
-            <button
-              class="add-channel"
-              onclick="openCreateModal('text')"
-              title="Criar canal de texto"
-            >
-              +
-            </button>
-
-          </div>
-
-          <div id="textChannels">
-
-            <!--
-              Os canais serão inseridos
-              automaticamente pelo JavaScript.
-            -->
-
-          </div>
-
-        </section>
-
-
-        <!-- CANAIS DE VOZ -->
-
-        <section class="category">
-
-          <div class="category-header">
-
-            <span class="category-title">
-              Canais de voz
-            </span>
-
-            <button
-              class="add-channel"
-              onclick="openCreateModal('voice')"
-              title="Criar canal de voz"
-            >
-              +
-            </button>
-
-          </div>
-
-          <div id="voiceChannels">
-
-            <!--
-              Os canais serão inseridos
-              automaticamente pelo JavaScript.
-            -->
-
-          </div>
-
-        </section>
-
-      </div>
-
-
-      <!-- PERFIL -->
-
-      <footer class="profile">
-
-        <div class="avatar">
-          MP
-        </div>
-
-        <div class="profile-info">
-
-          <div class="profile-name">
-            Marcos Paulo
-          </div>
-
-          <div class="profile-role">
-            Administrador
-          </div>
-
-        </div>
-
-      </footer>
-
-    </aside>
-
-
-    <!-- =======================================================
-         ÁREA PRINCIPAL
-         ======================================================= -->
-
-    <main class="main">
-
-      <header class="chat-header">
-
-        <button
-          class="mobile-menu"
-          onclick="toggleMobileMenu()"
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="seu@email.com"
+          autocomplete="username"
+          required
         >
-          ☰
-        </button>
 
-        <div class="channel-symbol" id="headerSymbol">
-          #
-        </div>
+      </div>
 
-        <div class="chat-info">
+      <div class="form-group">
 
-          <div
-            class="chat-name"
-            id="chatName"
-          >
-            Nenhum canal selecionado
-          </div>
+        <label for="loginPassword">
+          Senha
+        </label>
 
-          <div
-            class="chat-description"
-            id="chatDescription"
-          >
-            Crie um canal para começar.
-          </div>
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="Digite sua senha"
+          autocomplete="current-password"
+          required
+        >
 
-        </div>
+      </div>
 
-      </header>
-
-
-      <!-- CHAT -->
-
-      <section
-        class="messages"
-        id="messages"
+      <button
+        class="login-button"
+        type="submit"
       >
+        Entrar
+      </button>
 
-        <div class="empty-chat">
+      <div
+        id="loginError"
+        class="login-error hidden"
+      >
+        E-mail ou senha incorretos.
+      </div>
 
-          <div class="empty-chat-box">
+    </form>
 
-            <div class="empty-chat-icon">
-              #
-            </div>
+  </div>
 
-            <h1>
-              Sua comunicação começa aqui
-            </h1>
+</section>
 
-            <p>
-              Nenhum canal foi cadastrado ainda.
-              Utilize o botão <strong>+</strong> ao lado de
-              "Canais de texto" ou "Canais de voz"
-              para criar o primeiro canal da sua empresa.
-            </p>
 
-          </div>
+<!-- =========================================================
+     SISTEMA
+     ========================================================= -->
 
+<div
+  id="app"
+  class="app hidden"
+>
+
+  <!-- SETORES -->
+
+  <aside class="server-sidebar">
+
+    <div class="brand">
+      SC
+    </div>
+
+    <button class="server active">
+      G
+    </button>
+
+    <button class="server">
+      TI
+    </button>
+
+    <button class="server">
+      S
+    </button>
+
+    <button class="server">
+      C
+    </button>
+
+    <button class="server">
+      RH
+    </button>
+
+    <div class="server-spacer"></div>
+
+    <button
+      class="server"
+      id="settingsButton"
+      title="Configurações"
+    >
+      ⚙
+    </button>
+
+  </aside>
+
+
+  <!-- CANAIS -->
+
+  <aside
+    id="channelsSidebar"
+    class="channels-sidebar"
+  >
+
+    <header class="company-header">
+
+      <div>
+
+        <div class="company-name">
+          Softcom Connect
         </div>
 
-      </section>
+        <div class="company-unit">
+          Comunicação Interna
+        </div>
+
+      </div>
+
+    </header>
 
 
-      <!-- ENVIO -->
+    <div class="channel-scroll">
 
-      <footer class="composer-area">
+      <!-- TEXTO -->
 
-        <form
-          class="composer"
-          id="messageForm"
-        >
+      <section class="category">
+
+        <div class="category-header">
+
+          <span class="category-title">
+            Canais de texto
+          </span>
 
           <button
-            type="button"
-            class="composer-button"
-            title="Anexo"
+            class="add-button"
+            id="addTextChannel"
+            title="Criar canal de texto"
           >
             +
           </button>
 
-          <input
-            id="messageInput"
-            type="text"
-            placeholder="Selecione um canal para enviar uma mensagem"
-            disabled
-          >
+        </div>
+
+        <div id="textChannels"></div>
+
+      </section>
+
+
+      <!-- VOZ -->
+
+      <section class="category">
+
+        <div class="category-header">
+
+          <span class="category-title">
+            Canais de voz
+          </span>
 
           <button
-            type="button"
-            class="composer-button"
-            title="Emoji"
+            class="add-button"
+            id="addVoiceChannel"
+            title="Criar canal de voz"
           >
-            ☺
+            +
           </button>
-
-          <button
-            class="send"
-            type="submit"
-          >
-            ➤
-          </button>
-
-        </form>
-
-      </footer>
-
-    </main>
-
-  </div>
-
-
-  <!-- =========================================================
-       MODAL DE CRIAÇÃO
-       ========================================================= -->
-
-  <div
-    class="modal-overlay"
-    id="modalOverlay"
-  >
-
-    <div class="modal">
-
-      <div class="modal-header">
-
-        <div>
-
-          <div class="modal-title">
-            Criar canal
-          </div>
-
-          <div class="modal-subtitle">
-            Configure um novo canal para sua equipe.
-          </div>
 
         </div>
 
-        <button
-          class="close-modal"
-          onclick="closeCreateModal()"
+        <div id="voiceChannels"></div>
+
+      </section>
+
+    </div>
+
+
+    <!-- PERFIL -->
+
+    <footer class="profile">
+
+      <div
+        id="currentAvatar"
+        class="avatar"
+      >
+        DV
+      </div>
+
+      <div class="profile-info">
+
+        <div
+          id="currentUserName"
+          class="profile-name"
         >
-          ×
+          David
+        </div>
+
+        <div
+          id="currentUserRole"
+          class="profile-role"
+        >
+          Administrador
+        </div>
+
+      </div>
+
+      <div class="profile-buttons">
+
+        <button
+          class="profile-button"
+          id="usersButton"
+          title="Usuários"
+        >
+          ♙
+        </button>
+
+        <button
+          class="profile-button"
+          id="logoutButton"
+          title="Sair"
+        >
+          ↪
         </button>
 
       </div>
 
+    </footer>
 
-      <form id="createChannelForm">
+  </aside>
 
-        <div class="field">
 
-          <label for="channelType">
-            Tipo de canal
-          </label>
+  <!-- ÁREA PRINCIPAL -->
 
-          <select id="channelType">
+  <main class="main">
 
-            <option value="text">
-              # Canal de texto
-            </option>
+    <header class="chat-header">
 
-            <option value="voice">
-              🔊 Canal de voz
-            </option>
+      <button
+        id="mobileMenu"
+        class="mobile-menu"
+      >
+        ☰
+      </button>
 
-          </select>
+      <div
+        id="headerIcon"
+        class="header-icon"
+      >
+        #
+      </div>
 
+      <div class="chat-info">
+
+        <div
+          id="chatName"
+          class="chat-name"
+        >
+          Nenhum canal
         </div>
 
-
-        <div class="field">
-
-          <label for="channelName">
-            Nome do canal
-          </label>
-
-          <input
-            id="channelName"
-            type="text"
-            placeholder="Ex.: projetos"
-            maxlength="40"
-            required
-          >
-
+        <div
+          id="chatDescription"
+          class="chat-description"
+        >
+          Crie um canal para começar.
         </div>
 
+      </div>
 
-        <div class="field">
+      <div class="header-actions">
 
-          <label for="channelDescription">
-            Descrição
-          </label>
+        <button
+          class="header-button"
+          id="searchButton"
+          title="Pesquisar"
+        >
+          ⌕
+        </button>
 
-          <textarea
-            id="channelDescription"
-            placeholder="Explique para que este canal será utilizado..."
-            maxlength="160"
-          ></textarea>
+        <button
+          class="header-button"
+          id="membersButton"
+          title="Membros"
+        >
+          ♙
+        </button>
 
-        </div>
+        <button
+          class="header-button"
+          id="notificationButton"
+          title="Notificações"
+        >
+          ♧
+        </button>
+
+      </div>
+
+    </header>
 
 
-        <div class="modal-actions">
+    <!-- MENSAGENS -->
 
-          <button
-            type="button"
-            class="btn btn-cancel"
-            onclick="closeCreateModal()"
-          >
-            Cancelar
-          </button>
+    <section
+      id="messages"
+      class="messages"
+    >
 
-          <button
-            type="submit"
-            class="btn btn-create"
-          >
-            Criar canal
-          </button>
+    </section>
 
-        </div>
+
+    <!-- COMPOSER -->
+
+    <footer class="composer-area">
+
+      <form
+        id="messageForm"
+        class="composer"
+      >
+
+        <button
+          type="button"
+          class="composer-button"
+          id="attachmentButton"
+          title="Anexar"
+        >
+          +
+        </button>
+
+        <input
+          id="messageInput"
+          type="text"
+          placeholder="Selecione um canal"
+          disabled
+        >
+
+        <button
+          type="button"
+          class="composer-button"
+          id="emojiButton"
+          title="Emoji"
+        >
+          ☺
+        </button>
+
+        <button
+          type="submit"
+          class="send-button"
+          title="Enviar"
+        >
+          ➤
+        </button>
 
       </form>
+
+    </footer>
+
+  </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CANAL
+     ========================================================= -->
+
+<div
+  id="channelModal"
+  class="modal-overlay"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <div>
+
+        <div class="modal-title">
+          Criar canal
+        </div>
+
+        <div class="modal-subtitle">
+          Adicione um novo canal à comunicação interna.
+        </div>
+
+      </div>
+
+      <button
+        class="close"
+        id="closeChannelModal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="channelForm">
+
+      <div class="form-group">
+
+        <label>
+          Tipo
+        </label>
+
+        <select id="channelType">
+
+          <option value="text">
+            # Canal de texto
+          </option>
+
+          <option value="voice">
+            🔊 Canal de voz
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Nome
+        </label>
+
+        <input
+          id="channelName"
+          type="text"
+          placeholder="Ex.: projetos"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Descrição
+        </label>
+
+        <textarea
+          id="channelDescription"
+          placeholder="Descrição do canal"
+        ></textarea>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="cancelChannel"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
+          Criar canal
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL USUÁRIOS
+     ========================================================= -->
+
+<div
+  id="usersModal"
+  class="modal-overlay"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <div>
+
+        <div class="modal-title">
+          Usuários
+        </div>
+
+        <div class="modal-subtitle">
+          Gerencie os usuários da empresa.
+        </div>
+
+      </div>
+
+      <button
+        class="close"
+        id="closeUsersModal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="userList" class="user-list"></div>
+
+
+    <div
+      id="adminControls"
+      class="hidden"
+    >
+
+      <div
+        style="
+          margin-top:20px;
+          padding-top:20px;
+          border-top:1px solid var(--border);
+        "
+      >
+
+        <strong
+          style="
+            font-size:13px;
+            display:block;
+            margin-bottom:15px;
+          "
+        >
+          Adicionar usuário
+        </strong>
+
+
+        <form id="userForm">
+
+          <div class="form-group">
+
+            <label>
+              Nome
+            </label>
+
+            <input
+              id="newUserName"
+              type="text"
+              placeholder="Nome completo"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              E-mail
+            </label>
+
+            <input
+              id="newUserEmail"
+              type="email"
+              placeholder="usuario@empresa.com"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Senha
+            </label>
+
+            <input
+              id="newUserPassword"
+              type="password"
+              placeholder="Senha inicial"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Cargo
+            </label>
+
+            <input
+              id="newUserRole"
+              type="text"
+              placeholder="Ex.: Analista"
+              required
+            >
+
+          </div>
+
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >
+            Adicionar usuário
+          </button>
+
+        </form>
+
+      </div>
 
     </div>
 
   </div>
 
-
-  <script>
-
-    /* =========================================================
-       BANCO LOCAL
-       =========================================================
-
-       O sistema começa propositalmente sem canais.
-
-       Os dados ficam no navegador usando localStorage.
-
-       Depois, quando houver backend/API, esta parte pode ser
-       substituída por chamadas para o servidor.
-       ========================================================= */
-
-    let channels =
-      JSON.parse(
-        localStorage.getItem("softcom_channels")
-      ) || [];
-
-    let messages =
-      JSON.parse(
-        localStorage.getItem("softcom_messages")
-      ) || {};
-
-    let selectedChannel = null;
+</div>
 
 
-    /* =========================================================
-       ELEMENTOS
-       ========================================================= */
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
 
-    const textChannels =
-      document.getElementById("textChannels");
+<script>
 
-    const voiceChannels =
-      document.getElementById("voiceChannels");
+/*
+=============================================================
+CONFIGURAÇÃO INICIAL
+=============================================================
 
-    const messagesContainer =
-      document.getElementById("messages");
+IMPORTANTE:
 
-    const chatName =
-      document.getElementById("chatName");
+Esta é uma implementação FRONT-END para protótipo.
 
-    const chatDescription =
-      document.getElementById("chatDescription");
+O usuário inicial é criado automaticamente somente se
+o localStorage ainda não possuir usuários.
 
-    const headerSymbol =
-      document.getElementById("headerSymbol");
+Em produção, as credenciais devem ficar no servidor/banco,
+e as senhas devem ser armazenadas com hash.
+=============================================================
+*/
 
-    const messageInput =
-      document.getElementById("messageInput");
-
-    const modalOverlay =
-      document.getElementById("modalOverlay");
-
-    const createChannelForm =
-      document.getElementById("createChannelForm");
-
-    const channelType =
-      document.getElementById("channelType");
-
-    const channelName =
-      document.getElementById("channelName");
-
-    const channelDescription =
-      document.getElementById("channelDescription");
+const DEFAULT_ADMIN = {
+  id: "admin-david",
+  name: "David",
+  email: "david@softcom.com.br",
+  password: "tottenham0724",
+  role: "Administrador",
+  admin: true
+};
 
 
-    /* =========================================================
-       RENDERIZAR CANAIS
-       ========================================================= */
+/* =========================================================
+   ESTADO
+   ========================================================= */
 
-    function renderChannels() {
+let users =
+  JSON.parse(
+    localStorage.getItem("softcom_users")
+  ) || [];
 
-      textChannels.innerHTML = "";
-      voiceChannels.innerHTML = "";
+let channels =
+  JSON.parse(
+    localStorage.getItem("softcom_channels")
+  ) || [];
 
-      const text =
-        channels.filter(
-          channel => channel.type === "text"
-        );
+let messages =
+  JSON.parse(
+    localStorage.getItem("softcom_messages")
+  ) || {};
 
-      const voice =
-        channels.filter(
-          channel => channel.type === "voice"
-        );
+let currentUser =
+  JSON.parse(
+    localStorage.getItem("softcom_current_user")
+  ) || null;
 
-
-      if (text.length === 0) {
-
-        textChannels.innerHTML = `
-          <div class="empty-channels">
-            <div class="empty-icon">#</div>
-
-            <strong>Nenhum canal</strong>
-
-            <span>
-              Clique no + para criar seu primeiro canal.
-            </span>
-          </div>
-        `;
-
-      } else {
-
-        text.forEach(channel => {
-          textChannels.appendChild(
-            createChannelElement(channel)
-          );
-        });
-
-      }
+let selectedChannel = null;
 
 
-      if (voice.length === 0) {
+/* =========================================================
+   GARANTIR DAVID COMO PRIMEIRO ADMIN
+   ========================================================= */
 
-        voiceChannels.innerHTML = `
-          <div class="empty-channels">
-            <div class="empty-icon">◉</div>
+function initializeSystem() {
 
-            <strong>Nenhum canal</strong>
+  if (users.length === 0) {
 
-            <span>
-              Clique no + para criar uma sala.
-            </span>
-          </div>
-        `;
+    users.push(DEFAULT_ADMIN);
 
-      } else {
+    saveUsers();
 
-        voice.forEach(channel => {
-          voiceChannels.appendChild(
-            createChannelElement(channel)
-          );
-        });
+  }
 
-      }
+}
 
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function saveUsers() {
+
+  localStorage.setItem(
+    "softcom_users",
+    JSON.stringify(users)
+  );
+
+}
+
+
+function saveChannels() {
+
+  localStorage.setItem(
+    "softcom_channels",
+    JSON.stringify(channels)
+  );
+
+}
+
+
+function saveMessages() {
+
+  localStorage.setItem(
+    "softcom_messages",
+    JSON.stringify(messages)
+  );
+
+}
+
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const loginScreen =
+  document.getElementById("loginScreen");
+
+const app =
+  document.getElementById("app");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const loginError =
+  document.getElementById("loginError");
+
+const textChannels =
+  document.getElementById("textChannels");
+
+const voiceChannels =
+  document.getElementById("voiceChannels");
+
+const messagesContainer =
+  document.getElementById("messages");
+
+const chatName =
+  document.getElementById("chatName");
+
+const chatDescription =
+  document.getElementById("chatDescription");
+
+const headerIcon =
+  document.getElementById("headerIcon");
+
+const messageInput =
+  document.getElementById("messageInput");
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+loginForm.addEventListener(
+  "submit",
+  function(event) {
+
+    event.preventDefault();
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+
+    const user =
+      users.find(
+        item =>
+          item.email.toLowerCase() === email &&
+          item.password === password
+      );
+
+
+    if (!user) {
+
+      loginError.classList.remove(
+        "hidden"
+      );
+
+      return;
     }
 
 
-    /* =========================================================
-       ELEMENTO DE CANAL
-       ========================================================= */
+    currentUser = user;
 
-    function createChannelElement(channel) {
+    localStorage.setItem(
+      "softcom_current_user",
+      JSON.stringify(user)
+    );
 
-      const button =
-        document.createElement("button");
 
-      button.className = "channel";
+    loginError.classList.add(
+      "hidden"
+    );
 
-      if (selectedChannel === channel.id) {
-        button.classList.add("active");
+
+    showApplication();
+
+  }
+);
+
+
+/* =========================================================
+   MOSTRAR SISTEMA
+   ========================================================= */
+
+function showApplication() {
+
+  loginScreen.classList.add("hidden");
+
+  app.classList.remove("hidden");
+
+  updateProfile();
+
+  renderChannels();
+
+  renderEmptyState();
+
+}
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+function updateProfile() {
+
+  if (!currentUser) return;
+
+  document
+    .getElementById("currentUserName")
+    .textContent =
+      currentUser.name;
+
+  document
+    .getElementById("currentUserRole")
+    .textContent =
+      currentUser.admin
+        ? "Administrador"
+        : currentUser.role;
+
+  document
+    .getElementById("currentAvatar")
+    .textContent =
+      getInitials(currentUser.name);
+
+
+  document
+    .getElementById("usersButton")
+    .classList.toggle(
+      "hidden",
+      !currentUser.admin
+    );
+
+}
+
+
+/* =========================================================
+   INICIAIS
+   ========================================================= */
+
+function getInitials(name) {
+
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map(
+      word =>
+        word.charAt(0)
+    )
+    .join("")
+    .toUpperCase();
+
+}
+
+
+/* =========================================================
+   RENDER CANAIS
+   ========================================================= */
+
+function renderChannels() {
+
+  textChannels.innerHTML = "";
+  voiceChannels.innerHTML = "";
+
+
+  const text =
+    channels.filter(
+      channel =>
+        channel.type === "text"
+    );
+
+
+  const voice =
+    channels.filter(
+      channel =>
+        channel.type === "voice"
+    );
+
+
+  if (text.length === 0) {
+
+    textChannels.innerHTML =
+      `<div class="empty-category">
+        Nenhum canal criado.
+      </div>`;
+
+  } else {
+
+    text.forEach(
+      channel =>
+        textChannels.appendChild(
+          createChannelElement(channel)
+        )
+    );
+
+  }
+
+
+  if (voice.length === 0) {
+
+    voiceChannels.innerHTML =
+      `<div class="empty-category">
+        Nenhuma sala criada.
+      </div>`;
+
+  } else {
+
+    voice.forEach(
+      channel =>
+        voiceChannels.appendChild(
+          createChannelElement(channel)
+        )
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CRIAR ELEMENTO DO CANAL
+   ========================================================= */
+
+function createChannelElement(channel) {
+
+  const button =
+    document.createElement("button");
+
+  button.className = "channel";
+
+
+  if (
+    selectedChannel === channel.id
+  ) {
+
+    button.classList.add("active");
+
+  }
+
+
+  const icon =
+    channel.type === "text"
+      ? "#"
+      : "◉";
+
+
+  button.innerHTML = `
+
+    <span class="channel-icon">
+      ${icon}
+    </span>
+
+    <span class="channel-name">
+      ${escapeHTML(channel.name)}
+    </span>
+
+    ${
+      currentUser?.admin
+        ? `<button
+             class="delete-channel"
+             title="Excluir"
+           >
+             ×
+           </button>`
+        : ""
+    }
+
+  `;
+
+
+  button.addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target.classList.contains(
+          "delete-channel"
+        )
+      ) {
+
+        event.stopPropagation();
+
+        deleteChannel(
+          channel.id
+        );
+
+        return;
+
       }
 
-      const icon =
-        channel.type === "text"
-          ? "#"
-          : "◉";
 
-      button.innerHTML = `
+      selectChannel(
+        channel.id
+      );
 
-        <span class="channel-icon">
-          ${icon}
-        </span>
+    }
+  );
 
-        <span class="channel-name">
-          ${escapeHtml(channel.name)}
-        </span>
 
-        <span
-          class="channel-delete"
-          title="Excluir canal"
-        >
-          ×
-        </span>
+  return button;
+
+}
+
+
+/* =========================================================
+   SELECIONAR CANAL
+   ========================================================= */
+
+function selectChannel(id) {
+
+  const channel =
+    channels.find(
+      item =>
+        item.id === id
+    );
+
+
+  if (!channel) return;
+
+
+  selectedChannel = id;
+
+
+  chatName.textContent =
+    channel.type === "text"
+      ? "#" + channel.name
+      : "🔊 " + channel.name;
+
+
+  chatDescription.textContent =
+    channel.description ||
+    "Canal corporativo";
+
+
+  headerIcon.textContent =
+    channel.type === "text"
+      ? "#"
+      : "◉";
+
+
+  messageInput.disabled =
+    channel.type !== "text";
+
+
+  messageInput.placeholder =
+    channel.type === "text"
+      ? `Enviar mensagem em #${channel.name}`
+      : "Sala de voz selecionada";
+
+
+  renderChannels();
+
+  renderMessages();
+
+
+  document
+    .getElementById(
+      "channelsSidebar"
+    )
+    .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   MODAL CANAL
+   ========================================================= */
+
+function openChannelModal(type) {
+
+  document
+    .getElementById("channelModal")
+    .classList.add("active");
+
+
+  document
+    .getElementById("channelType")
+    .value = type;
+
+
+  document
+    .getElementById("channelName")
+    .value = "";
+
+
+  document
+    .getElementById("channelDescription")
+    .value = "";
+
+
+  setTimeout(
+    () =>
+      document
+        .getElementById("channelName")
+        .focus(),
+    100
+  );
+
+}
+
+
+function closeChannelModal() {
+
+  document
+    .getElementById("channelModal")
+    .classList.remove(
+      "active"
+    );
+
+}
+
+
+document
+  .getElementById("addTextChannel")
+  .addEventListener(
+    "click",
+    () =>
+      openChannelModal("text")
+  );
+
+
+document
+  .getElementById("addVoiceChannel")
+  .addEventListener(
+    "click",
+    () =>
+      openChannelModal("voice")
+  );
+
+
+document
+  .getElementById("closeChannelModal")
+  .addEventListener(
+    "click",
+    closeChannelModal
+  );
+
+
+document
+  .getElementById("cancelChannel")
+  .addEventListener(
+    "click",
+    closeChannelModal
+  );
+
+
+/* =========================================================
+   FORMULÁRIO DE CANAL
+   ========================================================= */
+
+document
+  .getElementById("channelForm")
+  .addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      if (!currentUser?.admin) {
+
+        alert(
+          "Somente administradores podem criar canais."
+        );
+
+        return;
+      }
+
+
+      const type =
+        document
+          .getElementById("channelType")
+          .value;
+
+
+      const name =
+        document
+          .getElementById("channelName")
+          .value
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "-");
+
+
+      const description =
+        document
+          .getElementById(
+            "channelDescription"
+          )
+          .value
+          .trim();
+
+
+      if (!name) return;
+
+
+      const exists =
+        channels.some(
+          channel =>
+            channel.name === name &&
+            channel.type === type
+        );
+
+
+      if (exists) {
+
+        alert(
+          "Já existe um canal com esse nome."
+        );
+
+        return;
+
+      }
+
+
+      const channel = {
+
+        id:
+          "channel-" +
+          Date.now(),
+
+        name,
+
+        type,
+
+        description,
+
+        createdBy:
+          currentUser.id,
+
+        createdAt:
+          new Date().toISOString()
+
+      };
+
+
+      channels.push(channel);
+
+      saveChannels();
+
+      closeChannelModal();
+
+      renderChannels();
+
+      selectChannel(channel.id);
+
+    }
+  );
+
+
+/* =========================================================
+   EXCLUIR CANAL
+   ========================================================= */
+
+function deleteChannel(id) {
+
+  if (!currentUser?.admin) {
+
+    alert(
+      "Somente administradores podem excluir canais."
+    );
+
+    return;
+  }
+
+
+  const channel =
+    channels.find(
+      item =>
+        item.id === id
+    );
+
+
+  if (!channel) return;
+
+
+  if (
+    !confirm(
+      `Excluir o canal "${channel.name}"?`
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  channels =
+    channels.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  delete messages[id];
+
+
+  saveChannels();
+  saveMessages();
+
+
+  if (
+    selectedChannel === id
+  ) {
+
+    selectedChannel = null;
+
+    renderEmptyState();
+
+  }
+
+
+  renderChannels();
+
+}
+
+
+/* =========================================================
+   ESTADO VAZIO
+   ========================================================= */
+
+function renderEmptyState() {
+
+  chatName.textContent =
+    "Nenhum canal selecionado";
+
+  chatDescription.textContent =
+    "Crie um canal para começar.";
+
+  headerIcon.textContent =
+    "#";
+
+  messageInput.disabled = true;
+
+  messageInput.placeholder =
+    "Selecione um canal";
+
+
+  messagesContainer.innerHTML = `
+
+    <div class="empty-state">
+
+      <div class="empty-state-box">
+
+        <div class="empty-state-icon">
+          #
+        </div>
+
+        <h1>
+          Sua comunicação começa aqui
+        </h1>
+
+        <p>
+          Nenhum canal foi criado ainda.
+          ${
+            currentUser?.admin
+              ? "Use o botão + ao lado de Canais de texto ou Canais de voz para começar."
+              : "Aguarde o administrador criar os canais da empresa."
+          }
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   MENSAGENS
+   ========================================================= */
+
+function renderMessages() {
+
+  if (!selectedChannel) {
+
+    renderEmptyState();
+
+    return;
+
+  }
+
+
+  const channel =
+    channels.find(
+      item =>
+        item.id === selectedChannel
+    );
+
+
+  if (!channel) {
+
+    renderEmptyState();
+
+    return;
+
+  }
+
+
+  const channelMessages =
+    messages[selectedChannel] || [];
+
+
+  messagesContainer.innerHTML = "";
+
+
+  if (
+    channelMessages.length === 0
+  ) {
+
+    messagesContainer.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-state-box">
+
+          <div class="empty-state-icon">
+            ${channel.type === "text" ? "#" : "◉"}
+          </div>
+
+          <h1>
+            Início de #${escapeHTML(channel.name)}
+          </h1>
+
+          <p>
+            Este canal ainda não possui mensagens.
+            Seja o primeiro a escrever.
+          </p>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  channelMessages.forEach(
+    message => {
+
+      const article =
+        document.createElement("article");
+
+      article.className =
+        "message";
+
+
+      article.innerHTML = `
+
+        <div class="message-avatar">
+          ${getInitials(message.userName)}
+        </div>
+
+        <div>
+
+          <div>
+
+            <span class="message-author">
+              ${escapeHTML(message.userName)}
+            </span>
+
+            <span class="message-time">
+              ${escapeHTML(message.time)}
+            </span>
+
+          </div>
+
+          <p class="message-text">
+            ${escapeHTML(message.text)}
+          </p>
+
+        </div>
 
       `;
 
 
-      button.addEventListener("click", (event) => {
+      messagesContainer.appendChild(
+        article
+      );
 
-        if (
-          event.target.classList.contains(
-            "channel-delete"
+    }
+  );
+
+
+  messagesContainer.scrollTop =
+    messagesContainer.scrollHeight;
+
+}
+
+
+/* =========================================================
+   ENVIAR MENSAGEM
+   ========================================================= */
+
+document
+  .getElementById("messageForm")
+  .addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      if (!selectedChannel) return;
+
+
+      const channel =
+        channels.find(
+          item =>
+            item.id === selectedChannel
+        );
+
+
+      if (
+        !channel ||
+        channel.type !== "text"
+      ) {
+
+        return;
+
+      }
+
+
+      const text =
+        messageInput.value.trim();
+
+
+      if (!text) return;
+
+
+      if (
+        !messages[selectedChannel]
+      ) {
+
+        messages[selectedChannel] = [];
+
+      }
+
+
+      const now =
+        new Date();
+
+
+      messages[selectedChannel].push({
+
+        userId:
+          currentUser.id,
+
+        userName:
+          currentUser.name,
+
+        text,
+
+        time:
+          now.toLocaleTimeString(
+            "pt-BR",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
           )
-        ) {
-
-          event.stopPropagation();
-
-          deleteChannel(channel.id);
-
-          return;
-        }
-
-        selectChannel(channel.id);
 
       });
 
 
-      return button;
-    }
-
-
-    /* =========================================================
-       SELECIONAR CANAL
-       ========================================================= */
-
-    function selectChannel(id) {
-
-      const channel =
-        channels.find(
-          item => item.id === id
-        );
-
-      if (!channel) return;
-
-      selectedChannel = id;
-
-      chatName.textContent =
-        channel.type === "text"
-          ? "#" + channel.name
-          : "🔊 " + channel.name;
-
-      chatDescription.textContent =
-        channel.description ||
-        "Canal corporativo da Softcom.";
-
-      headerSymbol.textContent =
-        channel.type === "text"
-          ? "#"
-          : "◉";
-
-      messageInput.disabled =
-        channel.type !== "text";
-
-      messageInput.placeholder =
-        channel.type === "text"
-          ? `Enviar mensagem em #${channel.name}`
-          : "Canal de voz selecionado";
-
-      renderMessages();
-
-      renderChannels();
-
-      closeMobileMenu();
-    }
-
-
-    /* =========================================================
-       CRIAR CANAL
-       ========================================================= */
-
-    function openCreateModal(type) {
-
-      modalOverlay.classList.add("active");
-
-      channelType.value = type;
-
-      channelName.value = "";
-      channelDescription.value = "";
-
-      setTimeout(() => {
-        channelName.focus();
-      }, 100);
-
-    }
-
-
-    function closeCreateModal() {
-
-      modalOverlay.classList.remove("active");
-
-    }
-
-
-    createChannelForm.addEventListener(
-      "submit",
-      function(event) {
-
-        event.preventDefault();
-
-        const name =
-          channelName.value
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, "-");
-
-        if (!name) return;
-
-
-        const alreadyExists =
-          channels.some(
-            channel =>
-              channel.name === name &&
-              channel.type === channelType.value
-          );
-
-
-        if (alreadyExists) {
-
-          alert(
-            "Já existe um canal com esse nome."
-          );
-
-          return;
-        }
-
-
-        const newChannel = {
-
-          id:
-            Date.now().toString(),
-
-          name,
-
-          type:
-            channelType.value,
-
-          description:
-            channelDescription.value.trim(),
-
-          createdAt:
-            new Date().toISOString()
-
-        };
-
-
-        channels.push(newChannel);
-
-        saveChannels();
-
-        closeCreateModal();
-
-        renderChannels();
-
-        selectChannel(newChannel.id);
-
-      }
-    );
-
-
-    /* =========================================================
-       EXCLUIR CANAL
-       ========================================================= */
-
-    function deleteChannel(id) {
-
-      const channel =
-        channels.find(
-          item => item.id === id
-        );
-
-      if (!channel) return;
-
-
-      const confirmDelete =
-        confirm(
-          `Deseja excluir o canal "${channel.name}"?`
-        );
-
-
-      if (!confirmDelete) return;
-
-
-      channels =
-        channels.filter(
-          item => item.id !== id
-        );
-
-
-      delete messages[id];
-
-      saveChannels();
       saveMessages();
 
 
-      if (selectedChannel === id) {
+      messageInput.value = "";
 
-        selectedChannel = null;
 
-        chatName.textContent =
-          "Nenhum canal selecionado";
+      renderMessages();
 
-        chatDescription.textContent =
-          "Crie ou selecione um canal para começar.";
+    }
+  );
 
-        headerSymbol.textContent = "#";
 
-        messageInput.disabled = true;
+/* =========================================================
+   EMOJI
+   ========================================================= */
 
-        messageInput.placeholder =
-          "Selecione um canal para enviar uma mensagem";
+document
+  .getElementById("emojiButton")
+  .addEventListener(
+    "click",
+    function() {
 
-        renderEmptyChat();
+      if (
+        messageInput.disabled
+      ) return;
+
+
+      const emojis = [
+        "😀",
+        "👍",
+        "🚀",
+        "🎉",
+        "👏",
+        "💙",
+        "🔥",
+        "😊"
+      ];
+
+
+      messageInput.value +=
+        emojis[
+          Math.floor(
+            Math.random() *
+            emojis.length
+          )
+        ];
+
+
+      messageInput.focus();
+
+    }
+  );
+
+
+/* =========================================================
+   ANEXO
+   ========================================================= */
+
+document
+  .getElementById("attachmentButton")
+  .addEventListener(
+    "click",
+    function() {
+
+      if (
+        !selectedChannel
+      ) {
+
+        alert(
+          "Selecione um canal primeiro."
+        );
+
+        return;
 
       }
 
 
-      renderChannels();
+      alert(
+        "Upload de arquivos será conectado ao armazenamento do servidor na versão com backend."
+      );
 
     }
+  );
 
 
-    /* =========================================================
-       MENSAGENS
-       ========================================================= */
+/* =========================================================
+   USUÁRIOS
+   ========================================================= */
 
-    function renderMessages() {
+document
+  .getElementById("usersButton")
+  .addEventListener(
+    "click",
+    openUsersModal
+  );
+
+
+document
+  .getElementById("closeUsersModal")
+  .addEventListener(
+    "click",
+    closeUsersModal
+  );
+
+
+function openUsersModal() {
+
+  if (!currentUser?.admin) {
+
+    alert(
+      "Acesso restrito ao administrador."
+    );
+
+    return;
+
+  }
+
+
+  renderUsers();
+
+
+  document
+    .getElementById("usersModal")
+    .classList.add("active");
+
+}
+
+
+function closeUsersModal() {
+
+  document
+    .getElementById("usersModal")
+    .classList.remove(
+      "active"
+    );
+
+}
+
+
+function renderUsers() {
+
+  const list =
+    document.getElementById(
+      "userList"
+    );
+
+
+  list.innerHTML = "";
+
+
+  users.forEach(
+    user => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "user-item";
+
+
+      item.innerHTML = `
+
+        <div class="avatar">
+          ${getInitials(user.name)}
+        </div>
+
+        <div class="user-item-info">
+
+          <div class="user-item-name">
+            ${escapeHTML(user.name)}
+          </div>
+
+          <div class="user-item-email">
+            ${escapeHTML(user.email)}
+          </div>
+
+        </div>
+
+        ${
+          user.admin
+            ? `<span class="admin-badge">
+                 ADMIN
+               </span>`
+            : `<button
+                 class="btn btn-danger"
+                 style="padding:6px 8px;font-size:10px"
+                 onclick="removeUser('${user.id}')"
+               >
+                 Remover
+               </button>`
+        }
+
+      `;
+
+
+      list.appendChild(item);
+
+    }
+  );
+
+
+  document
+    .getElementById("adminControls")
+    .classList.remove(
+      "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   ADICIONAR USUÁRIO
+   ========================================================= */
+
+document
+  .getElementById("userForm")
+  .addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      if (!currentUser?.admin) {
+
+        alert(
+          "Somente o administrador pode adicionar usuários."
+        );
+
+        return;
+
+      }
+
+
+      const name =
+        document
+          .getElementById("newUserName")
+          .value
+          .trim();
+
+
+      const email =
+        document
+          .getElementById("newUserEmail")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const password =
+        document
+          .getElementById("newUserPassword")
+          .value;
+
+
+      const role =
+        document
+          .getElementById("newUserRole")
+          .value
+          .trim();
+
+
+      const exists =
+        users.some(
+          user =>
+            user.email.toLowerCase() ===
+            email
+        );
+
+
+      if (exists) {
+
+        alert(
+          "Este e-mail já está cadastrado."
+        );
+
+        return;
+
+      }
+
+
+      const newUser = {
+
+        id:
+          "user-" +
+          Date.now(),
+
+        name,
+
+        email,
+
+        password,
+
+        role,
+
+        admin: false
+
+      };
+
+
+      users.push(newUser);
+
+      saveUsers();
+
+
+      document
+        .getElementById("userForm")
+        .reset();
+
+
+      renderUsers();
+
+
+      alert(
+        `Usuário ${name} criado com sucesso.`
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   REMOVER USUÁRIO
+   ========================================================= */
+
+function removeUser(id) {
+
+  if (!currentUser?.admin) {
+
+    return;
+
+  }
+
+
+  const user =
+    users.find(
+      item =>
+        item.id === id
+    );
+
+
+  if (!user) return;
+
+
+  if (
+    !confirm(
+      `Remover o usuário ${user.name}?`
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  users =
+    users.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  saveUsers();
+
+  renderUsers();
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    function() {
+
+      if (
+        !confirm(
+          "Deseja sair da conta?"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      currentUser = null;
+
+      selectedChannel = null;
+
+      localStorage.removeItem(
+        "softcom_current_user"
+      );
+
+
+      app.classList.add(
+        "hidden"
+      );
+
+      loginScreen.classList.remove(
+        "hidden"
+      );
+
+
+      document
+        .getElementById("loginPassword")
+        .value = "";
+
+    }
+  );
+
+
+/* =========================================================
+   CONFIGURAÇÕES
+   ========================================================= */
+
+document
+  .getElementById("settingsButton")
+  .addEventListener(
+    "click",
+    function() {
+
+      if (!currentUser) return;
+
+
+      alert(
+        `Usuário conectado: ${currentUser.name}\n` +
+        `E-mail: ${currentUser.email}\n` +
+        `Perfil: ${
+          currentUser.admin
+            ? "Administrador"
+            : currentUser.role
+        }`
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   OUTROS BOTÕES DO HEADER
+   ========================================================= */
+
+document
+  .getElementById("searchButton")
+  .addEventListener(
+    "click",
+    function() {
 
       if (!selectedChannel) {
 
-        renderEmptyChat();
+        alert(
+          "Selecione um canal para pesquisar."
+        );
 
         return;
+
       }
+
+
+      const search =
+        prompt(
+          "Pesquisar nesta conversa:"
+        );
+
+
+      if (!search) return;
 
 
       const channelMessages =
         messages[selectedChannel] || [];
 
 
-      messagesContainer.innerHTML = "";
-
-
-      if (channelMessages.length === 0) {
-
-        messagesContainer.innerHTML = `
-
-          <div class="empty-chat">
-
-            <div class="empty-chat-box">
-
-              <div class="empty-chat-icon">
-                #
-              </div>
-
-              <h1>
-                Início do canal
-              </h1>
-
-              <p>
-                Este canal ainda não possui mensagens.
-                Seja o primeiro a enviar uma mensagem.
-              </p>
-
-            </div>
-
-          </div>
-
-        `;
-
-        return;
-      }
-
-
-      channelMessages.forEach(message => {
-
-        const article =
-          document.createElement("article");
-
-        article.className = "message";
-
-        article.innerHTML = `
-
-          <div class="message-avatar">
-            MP
-          </div>
-
-          <div class="message-content">
-
-            <div class="message-meta">
-
-              <span class="message-author">
-                Marcos Paulo
-              </span>
-
-              <time class="message-time">
-                ${message.time}
-              </time>
-
-            </div>
-
-            <p class="message-text">
-              ${escapeHtml(message.text)}
-            </p>
-
-          </div>
-
-        `;
-
-        messagesContainer.appendChild(article);
-
-      });
-
-
-      messagesContainer.scrollTop =
-        messagesContainer.scrollHeight;
-    }
-
-
-    function renderEmptyChat() {
-
-      messagesContainer.innerHTML = `
-
-        <div class="empty-chat">
-
-          <div class="empty-chat-box">
-
-            <div class="empty-chat-icon">
-              #
-            </div>
-
-            <h1>
-              Sua comunicação começa aqui
-            </h1>
-
-            <p>
-              Nenhum canal foi cadastrado ainda.
-              Utilize o botão <strong>+</strong> ao lado de
-              "Canais de texto" ou "Canais de voz"
-              para criar o primeiro canal da sua empresa.
-            </p>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }
-
-
-    /* =========================================================
-       ENVIAR MENSAGEM
-       ========================================================= */
-
-    document
-      .getElementById("messageForm")
-      .addEventListener(
-        "submit",
-        function(event) {
-
-          event.preventDefault();
-
-          if (!selectedChannel) return;
-
-          const channel =
-            channels.find(
-              item => item.id === selectedChannel
-            );
-
-          if (!channel) return;
-
-          if (channel.type !== "text") return;
-
-
-          const text =
-            messageInput.value.trim();
-
-          if (!text) return;
-
-
-          if (!messages[selectedChannel]) {
-            messages[selectedChannel] = [];
-          }
-
-
-          const now =
-            new Date();
-
-
-          messages[selectedChannel].push({
-
-            text,
-
-            time:
-              now.toLocaleTimeString(
-                "pt-BR",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit"
-                }
+      const results =
+        channelMessages.filter(
+          message =>
+            message.text
+              .toLowerCase()
+              .includes(
+                search.toLowerCase()
               )
-
-          });
-
-
-          saveMessages();
-
-          messageInput.value = "";
-
-          renderMessages();
-
-        }
-      );
+        );
 
 
-    /* =========================================================
-       STORAGE
-       ========================================================= */
-
-    function saveChannels() {
-
-      localStorage.setItem(
-        "softcom_channels",
-        JSON.stringify(channels)
+      alert(
+        `${results.length} mensagem(ns) encontrada(s).`
       );
 
     }
+  );
 
 
-    function saveMessages() {
+document
+  .getElementById("membersButton")
+  .addEventListener(
+    "click",
+    openUsersModal
+  );
 
-      localStorage.setItem(
-        "softcom_messages",
-        JSON.stringify(messages)
+
+document
+  .getElementById("notificationButton")
+  .addEventListener(
+    "click",
+    function() {
+
+      alert(
+        "Notificações ativadas para este ambiente."
       );
 
     }
+  );
 
 
-    /* =========================================================
-       SEGURANÇA
-       ========================================================= */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-    function escapeHtml(text) {
-
-      const div =
-        document.createElement("div");
-
-      div.textContent = text;
-
-      return div.innerHTML;
-
-    }
-
-
-    /* =========================================================
-       MOBILE
-       ========================================================= */
-
-    function toggleMobileMenu() {
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    function() {
 
       document
-        .getElementById("channelsSidebar")
-        .classList.toggle("open");
+        .getElementById(
+          "channelsSidebar"
+        )
+        .classList.toggle(
+          "open"
+        );
 
     }
+  );
 
 
-    function closeMobileMenu() {
+/* =========================================================
+   UTILITÁRIO
+   ========================================================= */
 
-      document
-        .getElementById("channelsSidebar")
-        .classList.remove("open");
+function escapeHTML(value) {
 
-    }
+  const div =
+    document.createElement("div");
+
+  div.textContent = value;
+
+  return div.innerHTML;
+
+}
 
 
-    /* =========================================================
-       FECHAR MODAL CLICANDO FORA
-       ========================================================= */
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
 
-    modalOverlay.addEventListener(
-      "click",
-      function(event) {
+initializeSystem();
 
-        if (
-          event.target === modalOverlay
-        ) {
-          closeCreateModal();
-        }
 
-      }
+if (currentUser) {
+
+  const validUser =
+    users.find(
+      user =>
+        user.id ===
+        currentUser.id
     );
 
 
-    /* =========================================================
-       INICIALIZAÇÃO
-       ========================================================= */
+  if (validUser) {
 
-    renderChannels();
+    currentUser =
+      validUser;
 
-    renderEmptyChat();
+    showApplication();
 
-  </script>
+  } else {
+
+    localStorage.removeItem(
+      "softcom_current_user"
+    );
+
+  }
+
+}
+
+</script>
 
 </body>
 </html>
