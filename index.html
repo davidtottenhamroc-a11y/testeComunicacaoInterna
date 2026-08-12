@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="Softcom Connect - Comunicação interna corporativa"
-  />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Softcom Connect</title>
 
   <style>
     /* =========================================================
-       VARIÁVEIS DA MARCA
-       Altere as cores abaixo para personalizar a identidade
-       visual da Softcom em um único lugar.
+       CORES DA MARCA
+       Altere as variáveis abaixo para modificar toda a identidade
+       visual da aplicação.
        ========================================================= */
-    :root {
-      --softcom-primary: #0b4a8b;
-      --softcom-primary-dark: #003366;
-      --softcom-accent: #00a8e8;
-      --softcom-accent-light: #00c2ff;
 
-      --sidebar-bg: #0f172a;
-      --channel-bg: #1e293b;
-      --channel-bg-hover: #26364d;
+    :root {
+      --softcom-primary: #0B4A8B;
+      --softcom-primary-dark: #003366;
+
+      --softcom-accent: #00A8E8;
+      --softcom-accent-light: #00C2FF;
+
+      --sidebar-bg: #0F172A;
+      --channel-bg: #1E293B;
+      --channel-hover: #26364D;
       --channel-active: #334155;
 
-      --main-bg: #f8fafc;
-      --message-hover: #eef2f7;
-      --input-bg: #ffffff;
+      --main-bg: #F8FAFC;
+      --white: #FFFFFF;
 
-      --text-dark: #1e293b;
-      --text-light: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-light: #CBD5E1;
+      --text-muted: #94A3B8;
 
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --border: #E2E8F0;
+
+      --success: #22C55E;
+      --danger: #EF4444;
 
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
 
-      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
-      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.12);
-
-      --server-width: 76px;
-      --channels-width: 250px;
-      --header-height: 68px;
-      --profile-height: 72px;
+      --shadow: 0 8px 30px rgba(15, 23, 42, 0.15);
     }
 
     /* =========================================================
        RESET
        ========================================================= */
+
     * {
       margin: 0;
       padding: 0;
@@ -71,18 +65,20 @@
     body {
       font-family:
         Inter,
-        ui-sans-serif,
         system-ui,
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
       background: var(--main-bg);
-      color: var(--text-dark);
+      color: var(--text-primary);
     }
 
     button,
-    input {
+    input,
+    textarea,
+    select {
       font: inherit;
     }
 
@@ -92,11 +88,11 @@
     }
 
     /* =========================================================
-       SCROLLBAR PERSONALIZADA
+       SCROLLBAR
        ========================================================= */
+
     ::-webkit-scrollbar {
       width: 7px;
-      height: 7px;
     }
 
     ::-webkit-scrollbar-track {
@@ -104,230 +100,197 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #64748b;
-      border-radius: 999px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
+      background: #64748B;
+      border-radius: 20px;
     }
 
     /* =========================================================
-       APP
+       ESTRUTURA
        ========================================================= */
+
     .app {
       display: flex;
       width: 100%;
       height: 100vh;
-      min-height: 500px;
     }
 
     /* =========================================================
-       1. BARRA DE SERVIDORES / SETORES
+       SIDEBAR DOS SETORES
        ========================================================= */
+
     .server-sidebar {
-      width: var(--server-width);
-      flex: 0 0 var(--server-width);
+      width: 76px;
+      min-width: 76px;
+
       background: var(--sidebar-bg);
+
       display: flex;
       flex-direction: column;
       align-items: center;
+
       padding: 14px 0;
       gap: 10px;
-      overflow-y: auto;
-      z-index: 30;
     }
 
-    .brand-icon,
-    .server-icon {
+    .brand {
       width: 48px;
       height: 48px;
-      border-radius: 50%;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--softcom-primary),
+          var(--softcom-accent)
+        );
+
       color: white;
       font-weight: 800;
-      font-size: 13px;
-      transition:
-        border-radius 0.2s,
-        transform 0.2s,
-        background 0.2s;
-      position: relative;
     }
 
-    .brand-icon {
-      background: linear-gradient(
-        135deg,
-        var(--softcom-primary),
-        var(--softcom-accent)
-      );
-      border-radius: 15px;
-      font-size: 18px;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 5px;
-    }
+    .server {
+      width: 48px;
+      height: 48px;
 
-    .server-icon {
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       background: #263449;
-      color: #cbd5e1;
+      color: #CBD5E1;
+
+      font-size: 12px;
+      font-weight: 700;
+
+      transition: .2s;
     }
 
-    .server-icon:hover {
-      background: var(--softcom-primary);
-      border-radius: 15px;
-      transform: translateY(-1px);
-    }
-
-    .server-icon.active {
+    .server:hover,
+    .server.active {
       background: var(--softcom-accent);
       color: white;
-      border-radius: 15px;
+      border-radius: 14px;
     }
 
-    .server-icon::before {
-      content: "";
-      position: absolute;
-      left: -14px;
-      width: 4px;
-      height: 0;
-      background: white;
-      border-radius: 0 5px 5px 0;
-      transition: height 0.2s;
-    }
-
-    .server-icon.active::before {
-      height: 30px;
-    }
-
-    .server-divider {
-      width: 34px;
-      height: 1px;
-      background: #334155;
-      margin: 3px 0;
-    }
-
-    .server-spacer {
+    .spacer {
       flex: 1;
     }
 
-    .server-icon.status-icon {
-      background: #1e293b;
-      font-size: 19px;
-    }
-
     /* =========================================================
-       2. PAINEL DE CANAIS
+       SIDEBAR DE CANAIS
        ========================================================= */
+
     .channels-sidebar {
-      width: var(--channels-width);
-      flex: 0 0 var(--channels-width);
-      background: var(--channel-bg);
-      color: var(--text-light);
+      width: 270px;
+      min-width: 270px;
+
       display: flex;
       flex-direction: column;
-      min-width: 0;
-      z-index: 20;
+
+      background: var(--channel-bg);
+      color: white;
     }
 
     .company-header {
-      height: var(--header-height);
-      min-height: var(--header-height);
-      padding: 0 16px;
+      height: 68px;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: var(--shadow-sm);
-    }
 
-    .company-info {
-      min-width: 0;
+      padding: 0 16px;
+
+      border-bottom: 1px solid rgba(255,255,255,.06);
     }
 
     .company-name {
       font-size: 15px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 800;
     }
 
-    .company-unit {
-      color: var(--text-muted);
-      font-size: 11px;
+    .company-subtitle {
       margin-top: 3px;
-    }
 
-    .header-menu {
-      width: 30px;
-      height: 30px;
-      background: transparent;
+      font-size: 11px;
       color: var(--text-muted);
-      border-radius: var(--radius-sm);
-      font-size: 18px;
     }
 
-    .header-menu:hover {
-      background: var(--channel-bg-hover);
-      color: white;
-    }
-
-    .channels-scroll {
+    .channels-content {
       flex: 1;
+
       overflow-y: auto;
-      padding: 14px 9px;
+
+      padding: 15px 9px;
     }
 
     .category {
-      margin-bottom: 17px;
+      margin-bottom: 20px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 7px 8px;
     }
 
     .category-title {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 0 7px 7px;
-      color: #cbd5e1;
+      color: var(--text-light);
+
       font-size: 11px;
       font-weight: 800;
+
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
+      letter-spacing: .05em;
     }
 
-    .category-title .arrow {
-      font-size: 10px;
-      transition: transform 0.2s;
+    .add-channel {
+      width: 25px;
+      height: 25px;
+
+      border-radius: 6px;
+
+      background: transparent;
+      color: var(--text-muted);
+
+      font-size: 19px;
     }
 
-    .category.collapsed .arrow {
-      transform: rotate(-90deg);
-    }
-
-    .category.collapsed .channel-list {
-      display: none;
+    .add-channel:hover {
+      background: var(--channel-hover);
+      color: white;
     }
 
     .channel {
       width: 100%;
+
       display: flex;
       align-items: center;
+
       gap: 9px;
+
       padding: 8px 9px;
-      margin: 2px 0;
-      border-radius: var(--radius-sm);
-      color: #94a3b8;
+      margin-bottom: 2px;
+
+      border-radius: 7px;
+
       background: transparent;
+      color: var(--text-muted);
+
       text-align: left;
-      transition:
-        background 0.15s,
-        color 0.15s;
     }
 
     .channel:hover {
-      background: var(--channel-bg-hover);
-      color: #e2e8f0;
+      background: var(--channel-hover);
+      color: white;
     }
 
     .channel.active {
@@ -337,686 +300,658 @@
 
     .channel-icon {
       width: 20px;
-      text-align: center;
-      color: #64748b;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
 
-    .channel.active .channel-icon,
-    .channel:hover .channel-icon {
-      color: var(--softcom-accent-light);
+      color: var(--softcom-accent);
+      font-size: 18px;
+
+      text-align: center;
     }
 
     .channel-name {
+      flex: 1;
+
       overflow: hidden;
-      white-space: nowrap;
       text-overflow: ellipsis;
+      white-space: nowrap;
+
       font-size: 13px;
     }
 
-    .channel-badge {
-      margin-left: auto;
-      min-width: 19px;
-      height: 19px;
-      padding: 0 5px;
-      border-radius: 10px;
-      background: var(--softcom-accent);
-      color: white;
-      font-size: 10px;
+    .channel-delete {
+      opacity: 0;
+
+      color: #94A3B8;
+      background: transparent;
+
+      font-size: 14px;
+    }
+
+    .channel:hover .channel-delete {
+      opacity: 1;
+    }
+
+    .channel-delete:hover {
+      color: var(--danger);
+    }
+
+    /* =========================================================
+       ESTADO VAZIO
+       ========================================================= */
+
+    .empty-channels {
+      padding: 30px 15px;
+
+      text-align: center;
+
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      width: 45px;
+      height: 45px;
+
+      margin: 0 auto 10px;
+
+      border-radius: 12px;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+
+      background: #26364D;
+
+      color: var(--softcom-accent);
+
+      font-size: 22px;
     }
 
-    .profile-panel {
-      height: var(--profile-height);
-      min-height: var(--profile-height);
-      background: #172235;
+    .empty-channels strong {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #CBD5E1;
+
+      font-size: 12px;
+    }
+
+    .empty-channels span {
+      display: block;
+
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    /* =========================================================
+       PERFIL
+       ========================================================= */
+
+    .profile {
+      height: 72px;
+
       display: flex;
       align-items: center;
+
       gap: 9px;
+
       padding: 9px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+      background: #172235;
+
+      border-top: 1px solid rgba(255,255,255,.05);
     }
 
     .avatar {
       width: 40px;
       height: 40px;
-      flex: 0 0 40px;
-      border-radius: 50%;
-      background: linear-gradient(
-        135deg,
-        var(--softcom-primary),
-        var(--softcom-accent)
-      );
+
+      flex-shrink: 0;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 800;
-      font-size: 13px;
-      position: relative;
-    }
 
-    .avatar-status {
-      position: absolute;
-      right: -1px;
-      bottom: -1px;
-      width: 12px;
-      height: 12px;
-      border: 3px solid #172235;
-      background: var(--success);
       border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--softcom-primary),
+          var(--softcom-accent)
+        );
+
+      color: white;
+
+      font-size: 12px;
+      font-weight: 800;
     }
 
     .profile-info {
-      min-width: 0;
       flex: 1;
+      min-width: 0;
     }
 
     .profile-name {
       color: white;
+
       font-size: 12px;
       font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .profile-role {
+      margin-top: 3px;
+
       color: var(--text-muted);
+
       font-size: 10px;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .profile-actions {
-      display: flex;
-      gap: 2px;
-    }
-
-    .profile-action {
-      width: 27px;
-      height: 27px;
-      background: transparent;
-      color: #94a3b8;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .profile-action:hover {
-      background: #26364d;
-      color: white;
     }
 
     /* =========================================================
-       3. ÁREA PRINCIPAL
+       ÁREA PRINCIPAL
        ========================================================= */
-    .main-content {
+
+    .main {
       flex: 1;
+
       min-width: 0;
+
       display: flex;
       flex-direction: column;
+
       background: var(--main-bg);
     }
 
     .chat-header {
-      height: var(--header-height);
-      min-height: var(--header-height);
+      height: 68px;
+
       display: flex;
       align-items: center;
+
       gap: 12px;
+
       padding: 0 20px;
+
       background: white;
+
       border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      z-index: 10;
+
+      box-shadow:
+        0 2px 8px rgba(15,23,42,.05);
     }
 
-    .mobile-menu {
-      display: none;
-      width: 36px;
-      height: 36px;
-      background: #eef2f7;
-      border-radius: var(--radius-sm);
-      color: var(--text-dark);
-      font-size: 18px;
-    }
+    .channel-symbol {
+      width: 38px;
+      height: 38px;
 
-    .chat-channel-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      background: #e6f7fd;
-      color: var(--softcom-accent);
       display: flex;
       align-items: center;
       justify-content: center;
+
+      border-radius: 9px;
+
+      background: #E6F7FD;
+
+      color: var(--softcom-accent);
+
       font-size: 20px;
-      flex-shrink: 0;
     }
 
-    .chat-title-area {
+    .chat-info {
       min-width: 0;
     }
 
-    .chat-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .chat-name {
       font-size: 16px;
       font-weight: 800;
-      color: var(--text-dark);
-    }
-
-    .chat-title-symbol {
-      color: #64748b;
-      font-weight: 500;
     }
 
     .chat-description {
-      color: #64748b;
+      margin-top: 3px;
+
+      color: var(--text-secondary);
+
       font-size: 11px;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chat-header-actions {
-      margin-left: auto;
-      display: flex;
-      gap: 5px;
-    }
-
-    .chat-action {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius-sm);
-      background: transparent;
-      color: #64748b;
-      font-size: 17px;
-    }
-
-    .chat-action:hover {
-      background: #eef2f7;
-      color: var(--softcom-primary);
     }
 
     /* =========================================================
-       FEED
+       ESTADO VAZIO DO CHAT
        ========================================================= */
-    .messages {
+
+    .empty-chat {
       flex: 1;
-      overflow-y: auto;
-      padding: 18px 20px 24px;
-      scroll-behavior: smooth;
-    }
 
-    .channel-intro {
-      padding: 12px 0 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 12px;
-    }
-
-    .channel-intro-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: #e6f7fd;
-      color: var(--softcom-accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 27px;
-      margin-bottom: 10px;
+
+      padding: 30px;
     }
 
-    .channel-intro h1 {
-      font-size: 24px;
-      color: var(--text-dark);
-      margin-bottom: 4px;
+    .empty-chat-box {
+      max-width: 480px;
+
+      text-align: center;
     }
 
-    .channel-intro p {
-      color: #64748b;
+    .empty-chat-icon {
+      width: 72px;
+      height: 72px;
+
+      margin: 0 auto 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 20px;
+
+      background: #E6F7FD;
+
+      color: var(--softcom-accent);
+
+      font-size: 34px;
+    }
+
+    .empty-chat h1 {
+      margin-bottom: 8px;
+
+      font-size: 23px;
+    }
+
+    .empty-chat p {
+      color: var(--text-secondary);
+
       font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       MENSAGENS
+       ========================================================= */
+
+    .messages {
+      flex: 1;
+
+      overflow-y: auto;
+
+      padding: 20px;
     }
 
     .message {
       display: flex;
-      gap: 12px;
-      padding: 10px 9px;
+
+      gap: 11px;
+
+      padding: 9px;
+
       margin: 0 -9px;
-      border-radius: var(--radius-md);
-      transition: background 0.15s;
+
+      border-radius: 8px;
     }
 
     .message:hover {
-      background: var(--message-hover);
+      background: #EEF2F7;
     }
 
     .message-avatar {
       width: 40px;
       height: 40px;
-      border-radius: 50%;
-      flex: 0 0 40px;
+
+      flex-shrink: 0;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--softcom-primary),
+          var(--softcom-accent)
+        );
+
       color: white;
+
       font-size: 12px;
       font-weight: 800;
-      background: linear-gradient(
-        135deg,
-        var(--softcom-primary),
-        var(--softcom-accent)
-      );
     }
 
-    .message-avatar.green {
-      background: linear-gradient(135deg, #15803d, #22c55e);
-    }
-
-    .message-avatar.orange {
-      background: linear-gradient(135deg, #b45309, #f59e0b);
-    }
-
-    .message-avatar.purple {
-      background: linear-gradient(135deg, #6d28d9, #a855f7);
-    }
-
-    .message-body {
+    .message-content {
       min-width: 0;
-      flex: 1;
     }
 
     .message-meta {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 8px;
-      margin-bottom: 3px;
     }
 
     .message-author {
-      color: var(--text-dark);
       font-size: 13px;
       font-weight: 800;
     }
 
-    .message-role {
-      color: var(--softcom-primary);
-      font-size: 9px;
-      font-weight: 700;
-      background: #e6f0f9;
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
-
     .message-time {
-      color: #94a3b8;
+      color: var(--text-muted);
       font-size: 10px;
     }
 
     .message-text {
+      margin-top: 4px;
+
       color: #475569;
+
       font-size: 13px;
-      line-height: 1.55;
-      word-break: break-word;
-    }
-
-    .message-attachment {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      max-width: 390px;
-      margin-top: 9px;
-      padding: 10px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-    }
-
-    .attachment-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 8px;
-      background: #e6f7fd;
-      color: var(--softcom-accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .attachment-info {
-      min-width: 0;
-    }
-
-    .attachment-name {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-
-    .attachment-size {
-      color: #94a3b8;
-      font-size: 10px;
-      margin-top: 2px;
+      line-height: 1.5;
     }
 
     /* =========================================================
        COMPOSER
        ========================================================= */
+
     .composer-area {
       padding: 10px 20px 16px;
-      background: var(--main-bg);
     }
 
     .composer {
-      min-height: 50px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 9px;
-      background: var(--input-bg);
+
+      gap: 7px;
+
+      padding: 6px 8px;
+
+      background: white;
+
       border: 1px solid var(--border);
+
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
+
+      box-shadow:
+        0 2px 8px rgba(15,23,42,.06);
     }
 
-    .composer:focus-within {
-      border-color: rgba(0, 168, 232, 0.55);
-      box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.08);
+    .composer input {
+      flex: 1;
+
+      min-width: 0;
+
+      height: 36px;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      color: var(--text-primary);
+    }
+
+    .composer input:disabled {
+      cursor: not-allowed;
     }
 
     .composer-button {
-      width: 34px;
-      height: 34px;
-      flex: 0 0 34px;
+      width: 35px;
+      height: 35px;
+
       border-radius: 8px;
+
       background: transparent;
-      color: #64748b;
-      font-size: 19px;
+      color: var(--text-secondary);
+
+      font-size: 18px;
     }
 
     .composer-button:hover {
+      background: #EEF2F7;
       color: var(--softcom-primary);
-      background: #eef2f7;
     }
 
-    .message-input {
-      flex: 1;
-      min-width: 0;
-      height: 36px;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: var(--text-dark);
-      font-size: 13px;
-    }
-
-    .message-input::placeholder {
-      color: #94a3b8;
-    }
-
-    .send-button {
+    .send {
       width: 38px;
       height: 38px;
-      flex: 0 0 38px;
-      border-radius: 10px;
-      color: white;
+
+      border-radius: 9px;
+
       background: var(--softcom-primary);
-      font-size: 16px;
-      transition:
-        background 0.2s,
-        transform 0.2s;
+
+      color: white;
     }
 
-    .send-button:hover {
+    .send:hover {
       background: var(--softcom-accent);
-      transform: translateY(-1px);
     }
 
     /* =========================================================
-       STATUS MENU
+       MODAL
        ========================================================= */
-    .status-menu {
+
+    .modal-overlay {
       position: fixed;
-      left: 12px;
-      bottom: 82px;
-      width: 170px;
-      padding: 7px;
-      background: #172235;
-      border: 1px solid #334155;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-md);
-      z-index: 100;
+      inset: 0;
+
       display: none;
-    }
-
-    .status-menu.open {
-      display: block;
-    }
-
-    .status-option {
-      width: 100%;
-      display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 8px;
-      border-radius: 6px;
-      color: #cbd5e1;
-      background: transparent;
-      text-align: left;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: rgba(15,23,42,.65);
+
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 450px;
+
+      padding: 22px;
+
+      background: white;
+
+      border-radius: 16px;
+
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .modal-subtitle {
+      margin-top: 5px;
+
+      color: var(--text-secondary);
+
       font-size: 12px;
     }
 
-    .status-option:hover {
-      background: #26364d;
+    .close-modal {
+      width: 32px;
+      height: 32px;
+
+      border-radius: 7px;
+
+      background: #F1F5F9;
+
+      color: var(--text-secondary);
+
+      font-size: 18px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      color: var(--text-primary);
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+
+      padding: 11px 12px;
+
+      border: 1px solid var(--border);
+
+      border-radius: 8px;
+
+      outline: 0;
+
+      background: #F8FAFC;
+
+      color: var(--text-primary);
+
+      font-size: 13px;
+    }
+
+    .field textarea {
+      min-height: 90px;
+
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--softcom-accent);
+      box-shadow:
+        0 0 0 3px rgba(0,168,232,.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+
+      gap: 8px;
+
+      margin-top: 22px;
+    }
+
+    .btn {
+      padding: 10px 15px;
+
+      border-radius: 8px;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-cancel {
+      background: #F1F5F9;
+      color: var(--text-secondary);
+    }
+
+    .btn-create {
+      background: var(--softcom-primary);
       color: white;
     }
 
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--success);
-    }
-
-    .status-dot.busy {
-      background: var(--danger);
-    }
-
-    .status-dot.away {
-      background: var(--warning);
+    .btn-create:hover {
+      background: var(--softcom-accent);
     }
 
     /* =========================================================
-       RESPONSIVIDADE
+       RESPONSIVO
        ========================================================= */
 
-    /* Tablets */
-    @media (max-width: 900px) {
-      :root {
-        --channels-width: 220px;
-      }
-
-      .chat-header-actions .hide-tablet {
-        display: none;
-      }
-
-      .messages {
-        padding-left: 15px;
-        padding-right: 15px;
-      }
-
-      .composer-area {
-        padding-left: 15px;
-        padding-right: 15px;
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 700px) {
-      html,
-      body {
-        overflow: hidden;
-      }
+    @media (max-width: 800px) {
 
       .server-sidebar {
         width: 60px;
-        flex-basis: 60px;
+        min-width: 60px;
       }
 
-      .brand-icon,
-      .server-icon {
+      .server,
+      .brand {
         width: 40px;
         height: 40px;
       }
 
-      .server-icon::before {
-        left: -10px;
-      }
-
       .channels-sidebar {
         position: fixed;
+
         left: 60px;
         top: 0;
         bottom: 0;
-        width: min(82vw, 280px);
+
+        z-index: 50;
+
         transform: translateX(-110%);
-        transition: transform 0.25s ease;
-        box-shadow: 12px 0 30px rgba(0, 0, 0, 0.22);
+
+        transition: transform .25s ease;
+
+        box-shadow: var(--shadow);
       }
 
-      .channels-sidebar.mobile-open {
+      .channels-sidebar.open {
         transform: translateX(0);
       }
 
       .mobile-menu {
-        display: block;
+        display: flex;
       }
+    }
 
-      .chat-header {
-        padding: 0 12px;
-        gap: 8px;
-      }
-
-      .chat-description {
-        max-width: 180px;
-      }
-
-      .chat-header-actions {
-        gap: 0;
-      }
-
-      .chat-action:nth-child(1),
-      .chat-action:nth-child(2) {
-        display: none;
-      }
-
-      .messages {
-        padding: 14px 12px 20px;
-      }
-
-      .channel-intro h1 {
-        font-size: 21px;
-      }
-
-      .message {
-        gap: 9px;
-      }
-
-      .message-avatar {
-        width: 36px;
-        height: 36px;
-        flex-basis: 36px;
-      }
-
-      .message-role {
-        display: none;
-      }
-
-      .composer-area {
-        padding: 7px 9px 10px;
-      }
-
-      .composer {
-        min-height: 48px;
-      }
-
-      .composer-button:nth-of-type(2) {
+    @media (min-width: 801px) {
+      .mobile-menu {
         display: none;
       }
     }
 
-    /* Mobile pequeno */
-    @media (max-width: 480px) {
+    @media (max-width: 550px) {
+
       .server-sidebar {
         width: 52px;
-        flex-basis: 52px;
+        min-width: 52px;
       }
 
-      .brand-icon,
-      .server-icon {
+      .server,
+      .brand {
         width: 36px;
         height: 36px;
-        font-size: 11px;
-      }
-
-      .brand-icon {
-        font-size: 15px;
       }
 
       .channels-sidebar {
         left: 52px;
+        width: min(85vw, 280px);
+        min-width: 0;
       }
 
-      .chat-title {
-        font-size: 14px;
+      .chat-header {
+        padding: 0 12px;
       }
 
-      .chat-channel-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 17px;
+      .messages {
+        padding: 15px;
       }
 
-      .chat-header-actions {
-        display: none;
-      }
-
-      .message-text {
-        font-size: 12px;
-      }
-
-      .message-input {
-        font-size: 12px;
-      }
-    }
-
-    /* =========================================================
-       OVERLAY MOBILE
-       ========================================================= */
-    .mobile-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.5);
-      z-index: 15;
-      display: none;
-    }
-
-    .mobile-overlay.visible {
-      display: block;
-    }
-
-    @media (min-width: 701px) {
-      .mobile-overlay {
-        display: none !important;
+      .composer-area {
+        padding: 8px;
       }
     }
   </style>
@@ -1027,388 +962,266 @@
   <div class="app">
 
     <!-- =======================================================
-         BARRA LATERAL DE SETORES
+         SETORES
          ======================================================= -->
-    <aside class="server-sidebar" aria-label="Setores da empresa">
 
-      <button class="brand-icon" title="Softcom Connect" aria-label="Softcom">
+    <aside class="server-sidebar">
+
+      <div class="brand">
         SC
+      </div>
+
+      <button class="server active">
+        G
       </button>
 
-      <div class="server-divider"></div>
+      <button class="server">
+        TI
+      </button>
 
-      <button class="server-icon active" title="Geral">G</button>
-      <button class="server-icon" title="Tecnologia">TI</button>
-      <button class="server-icon" title="Suporte">S</button>
-      <button class="server-icon" title="Comercial">C</button>
-      <button class="server-icon" title="Recursos Humanos">RH</button>
+      <button class="server">
+        S
+      </button>
 
-      <div class="server-spacer"></div>
+      <button class="server">
+        C
+      </button>
 
-      <button
-        class="server-icon status-icon"
-        id="statusButton"
-        title="Alterar status"
-        aria-label="Alterar status"
-      >
-        ●
+      <button class="server">
+        RH
+      </button>
+
+      <div class="spacer"></div>
+
+      <button class="server">
+        ⚙
       </button>
 
     </aside>
 
+
     <!-- =======================================================
-         PAINEL DE CANAIS
+         CANAIS
          ======================================================= -->
+
     <aside class="channels-sidebar" id="channelsSidebar">
 
       <header class="company-header">
-        <div class="company-info">
-          <div class="company-name">Softcom • João Pessoa</div>
-          <div class="company-unit">Comunicação Interna</div>
+
+        <div>
+          <div class="company-name">
+            Softcom Connect
+          </div>
+
+          <div class="company-subtitle">
+            Comunicação Interna
+          </div>
         </div>
 
-        <button class="header-menu" title="Mais opções">⋯</button>
       </header>
 
-      <div class="channels-scroll">
 
-        <!-- Categoria Texto -->
+      <div class="channels-content">
+
+        <!-- CANAIS DE TEXTO -->
+
         <section class="category">
 
-          <div class="category-title">
-            <span class="arrow">▼</span>
-            <span>Canais de texto</span>
-          </div>
+          <div class="category-header">
 
-          <div class="channel-list">
-
-            <button
-              class="channel active"
-              data-channel="avisos-gerais"
-              data-title="avisos-gerais"
-              data-description="Comunicados oficiais, novidades e informações importantes da Softcom."
-            >
-              <span class="channel-icon">#</span>
-              <span class="channel-name">avisos-gerais</span>
-              <span class="channel-badge">3</span>
-            </button>
+            <span class="category-title">
+              Canais de texto
+            </span>
 
             <button
-              class="channel"
-              data-channel="projetos"
-              data-title="projetos"
-              data-description="Acompanhe os projetos, entregas e iniciativas em andamento."
+              class="add-channel"
+              onclick="openCreateModal('text')"
+              title="Criar canal de texto"
             >
-              <span class="channel-icon">#</span>
-              <span class="channel-name">projetos</span>
-            </button>
-
-            <button
-              class="channel"
-              data-channel="suporte"
-              data-title="suporte"
-              data-description="Alinhamentos e comunicação da equipe de suporte."
-            >
-              <span class="channel-icon">#</span>
-              <span class="channel-name">suporte</span>
-              <span class="channel-badge">7</span>
-            </button>
-
-            <button
-              class="channel"
-              data-channel="comercial"
-              data-title="comercial"
-              data-description="Oportunidades, negociações e informações comerciais."
-            >
-              <span class="channel-icon">#</span>
-              <span class="channel-name">comercial</span>
-            </button>
-
-            <button
-              class="channel"
-              data-channel="rh"
-              data-title="rh"
-              data-description="Informações, comunicados e iniciativas de pessoas."
-            >
-              <span class="channel-icon">#</span>
-              <span class="channel-name">rh</span>
+              +
             </button>
 
           </div>
+
+          <div id="textChannels">
+
+            <!--
+              Os canais serão inseridos
+              automaticamente pelo JavaScript.
+            -->
+
+          </div>
+
         </section>
 
-        <!-- Categoria Voz -->
+
+        <!-- CANAIS DE VOZ -->
+
         <section class="category">
 
-          <div class="category-title">
-            <span class="arrow">▼</span>
-            <span>Canais de voz</span>
-          </div>
+          <div class="category-header">
 
-          <div class="channel-list">
+            <span class="category-title">
+              Canais de voz
+            </span>
 
-            <button class="channel" data-title="Sala Reunião 1">
-              <span class="channel-icon">◉</span>
-              <span class="channel-name">Sala Reunião 1</span>
-            </button>
-
-            <button class="channel" data-title="Sala Reunião 2">
-              <span class="channel-icon">◉</span>
-              <span class="channel-name">Sala Reunião 2</span>
-            </button>
-
-            <button class="channel" data-title="Descompressão">
-              <span class="channel-icon">◉</span>
-              <span class="channel-name">Descompressão</span>
-              <span class="channel-badge">2</span>
+            <button
+              class="add-channel"
+              onclick="openCreateModal('voice')"
+              title="Criar canal de voz"
+            >
+              +
             </button>
 
           </div>
+
+          <div id="voiceChannels">
+
+            <!--
+              Os canais serão inseridos
+              automaticamente pelo JavaScript.
+            -->
+
+          </div>
+
         </section>
 
       </div>
 
-      <!-- Perfil do usuário -->
-      <footer class="profile-panel">
+
+      <!-- PERFIL -->
+
+      <footer class="profile">
 
         <div class="avatar">
           MP
-          <span class="avatar-status"></span>
         </div>
 
         <div class="profile-info">
-          <div class="profile-name">Marcos Paulo</div>
-          <div class="profile-role">Desenvolvedor Front-end</div>
-        </div>
 
-        <div class="profile-actions">
-          <button class="profile-action" title="Silenciar">♩</button>
-          <button class="profile-action" title="Desativar áudio">◉</button>
-          <button class="profile-action" title="Configurações">⚙</button>
+          <div class="profile-name">
+            Marcos Paulo
+          </div>
+
+          <div class="profile-role">
+            Administrador
+          </div>
+
         </div>
 
       </footer>
 
     </aside>
 
-    <!-- Overlay usado no mobile -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- =======================================================
-         ÁREA CENTRAL
+         ÁREA PRINCIPAL
          ======================================================= -->
-    <main class="main-content">
 
-      <!-- Cabeçalho do chat -->
+    <main class="main">
+
       <header class="chat-header">
 
         <button
           class="mobile-menu"
-          id="mobileMenu"
-          aria-label="Abrir canais"
-          title="Abrir canais"
+          onclick="toggleMobileMenu()"
         >
           ☰
         </button>
 
-        <div class="chat-channel-icon">#</div>
-
-        <div class="chat-title-area">
-          <div class="chat-title">
-            <span class="chat-title-symbol">#</span>
-            <span id="currentChannelName">avisos-gerais</span>
-          </div>
-
-          <div class="chat-description" id="currentChannelDescription">
-            Comunicados oficiais, novidades e informações importantes da Softcom.
-          </div>
+        <div class="channel-symbol" id="headerSymbol">
+          #
         </div>
 
-        <div class="chat-header-actions">
-          <button class="chat-action hide-tablet" title="Notificações">
-            ♧
-          </button>
+        <div class="chat-info">
 
-          <button class="chat-action hide-tablet" title="Fixados">
-            ▣
-          </button>
+          <div
+            class="chat-name"
+            id="chatName"
+          >
+            Nenhum canal selecionado
+          </div>
 
-          <button class="chat-action" title="Pesquisar">
-            ⌕
-          </button>
+          <div
+            class="chat-description"
+            id="chatDescription"
+          >
+            Crie um canal para começar.
+          </div>
 
-          <button class="chat-action" title="Membros">
-            ♙
-          </button>
         </div>
 
       </header>
 
-      <!-- =====================================================
-           FEED
-           ===================================================== -->
-      <section class="messages" id="messages">
 
-        <div class="channel-intro">
-          <div class="channel-intro-icon">#</div>
+      <!-- CHAT -->
 
-          <h1>
-            Bem-vindo ao #avisos-gerais!
-          </h1>
+      <section
+        class="messages"
+        id="messages"
+      >
 
-          <p>
-            Este é o início do canal. Aqui ficam os principais comunicados
-            internos da Softcom.
-          </p>
+        <div class="empty-chat">
+
+          <div class="empty-chat-box">
+
+            <div class="empty-chat-icon">
+              #
+            </div>
+
+            <h1>
+              Sua comunicação começa aqui
+            </h1>
+
+            <p>
+              Nenhum canal foi cadastrado ainda.
+              Utilize o botão <strong>+</strong> ao lado de
+              "Canais de texto" ou "Canais de voz"
+              para criar o primeiro canal da sua empresa.
+            </p>
+
+          </div>
+
         </div>
-
-        <!-- Mensagem 1 -->
-        <article class="message">
-
-          <div class="message-avatar">AM</div>
-
-          <div class="message-body">
-
-            <div class="message-meta">
-              <span class="message-author">Ana Martins</span>
-              <span class="message-role">RH</span>
-              <time class="message-time">Hoje às 09:12</time>
-            </div>
-
-            <p class="message-text">
-              Bom dia, pessoal! Lembrando que nossa reunião geral acontece
-              hoje às 16h. O encontro será realizado na Sala de Reunião 1
-              e também estará disponível pelo canal de voz.
-            </p>
-
-          </div>
-
-        </article>
-
-        <!-- Mensagem 2 -->
-        <article class="message">
-
-          <div class="message-avatar green">RC</div>
-
-          <div class="message-body">
-
-            <div class="message-meta">
-              <span class="message-author">Rafael Costa</span>
-              <span class="message-role">TI</span>
-              <time class="message-time">Hoje às 09:28</time>
-            </div>
-
-            <p class="message-text">
-              O novo processo de autenticação corporativa já está disponível.
-              Quem ainda não realizou a atualização pode seguir o procedimento
-              enviado por e-mail.
-            </p>
-
-          </div>
-
-        </article>
-
-        <!-- Mensagem 3 -->
-        <article class="message">
-
-          <div class="message-avatar orange">CL</div>
-
-          <div class="message-body">
-
-            <div class="message-meta">
-              <span class="message-author">Camila Lima</span>
-              <span class="message-role">Comercial</span>
-              <time class="message-time">Hoje às 10:04</time>
-            </div>
-
-            <p class="message-text">
-              Compartilhando a apresentação atualizada com os principais
-              indicadores comerciais do mês.
-            </p>
-
-            <div class="message-attachment">
-              <div class="attachment-icon">▣</div>
-
-              <div class="attachment-info">
-                <div class="attachment-name">
-                  indicadores-comercial-agosto.pdf
-                </div>
-
-                <div class="attachment-size">
-                  PDF • 2,4 MB
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </article>
-
-        <!-- Mensagem 4 -->
-        <article class="message">
-
-          <div class="message-avatar purple">JP</div>
-
-          <div class="message-body">
-
-            <div class="message-meta">
-              <span class="message-author">João Pedro</span>
-              <span class="message-role">Produto</span>
-              <time class="message-time">Hoje às 10:37</time>
-            </div>
-
-            <p class="message-text">
-              Excelente! Também finalizamos a primeira etapa do novo painel
-              administrativo. Assim que validarmos com QA, compartilho a
-              atualização no canal #projetos.
-            </p>
-
-          </div>
-
-        </article>
 
       </section>
 
-      <!-- =====================================================
-           COMPOSITOR DE MENSAGEM
-           ===================================================== -->
+
+      <!-- ENVIO -->
+
       <footer class="composer-area">
 
-        <form class="composer" id="messageForm">
+        <form
+          class="composer"
+          id="messageForm"
+        >
 
           <button
             type="button"
             class="composer-button"
-            title="Adicionar anexo"
-            aria-label="Adicionar anexo"
+            title="Anexo"
           >
             +
           </button>
 
           <input
             id="messageInput"
-            class="message-input"
             type="text"
-            autocomplete="off"
-            placeholder="Enviar mensagem em #avisos-gerais"
-            aria-label="Mensagem"
-          />
+            placeholder="Selecione um canal para enviar uma mensagem"
+            disabled
+          >
 
           <button
             type="button"
             class="composer-button"
-            title="Adicionar emoji"
-            aria-label="Adicionar emoji"
-            id="emojiButton"
+            title="Emoji"
           >
             ☺
           </button>
 
           <button
+            class="send"
             type="submit"
-            class="send-button"
-            title="Enviar mensagem"
-            aria-label="Enviar mensagem"
           >
             ➤
           </button>
@@ -1421,236 +1234,809 @@
 
   </div>
 
+
   <!-- =========================================================
-       MENU DE STATUS
+       MODAL DE CRIAÇÃO
        ========================================================= -->
-  <div class="status-menu" id="statusMenu">
 
-    <button class="status-option" data-status="online">
-      <span class="status-dot"></span>
-      Online
-    </button>
+  <div
+    class="modal-overlay"
+    id="modalOverlay"
+  >
 
-    <button class="status-option" data-status="busy">
-      <span class="status-dot busy"></span>
-      Ocupado
-    </button>
+    <div class="modal">
 
-    <button class="status-option" data-status="away">
-      <span class="status-dot away"></span>
-      Ausente
-    </button>
+      <div class="modal-header">
+
+        <div>
+
+          <div class="modal-title">
+            Criar canal
+          </div>
+
+          <div class="modal-subtitle">
+            Configure um novo canal para sua equipe.
+          </div>
+
+        </div>
+
+        <button
+          class="close-modal"
+          onclick="closeCreateModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="createChannelForm">
+
+        <div class="field">
+
+          <label for="channelType">
+            Tipo de canal
+          </label>
+
+          <select id="channelType">
+
+            <option value="text">
+              # Canal de texto
+            </option>
+
+            <option value="voice">
+              🔊 Canal de voz
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="channelName">
+            Nome do canal
+          </label>
+
+          <input
+            id="channelName"
+            type="text"
+            placeholder="Ex.: projetos"
+            maxlength="40"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="channelDescription">
+            Descrição
+          </label>
+
+          <textarea
+            id="channelDescription"
+            placeholder="Explique para que este canal será utilizado..."
+            maxlength="160"
+          ></textarea>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="btn btn-cancel"
+            onclick="closeCreateModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-create"
+          >
+            Criar canal
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
 
   </div>
 
+
   <script>
+
     /* =========================================================
-       TROCA DE CANAIS
+       BANCO LOCAL
+       =========================================================
+
+       O sistema começa propositalmente sem canais.
+
+       Os dados ficam no navegador usando localStorage.
+
+       Depois, quando houver backend/API, esta parte pode ser
+       substituída por chamadas para o servidor.
        ========================================================= */
 
-    const channels = document.querySelectorAll(".channel");
-    const currentChannelName =
-      document.getElementById("currentChannelName");
-    const currentChannelDescription =
-      document.getElementById("currentChannelDescription");
+    let channels =
+      JSON.parse(
+        localStorage.getItem("softcom_channels")
+      ) || [];
+
+    let messages =
+      JSON.parse(
+        localStorage.getItem("softcom_messages")
+      ) || {};
+
+    let selectedChannel = null;
+
+
+    /* =========================================================
+       ELEMENTOS
+       ========================================================= */
+
+    const textChannels =
+      document.getElementById("textChannels");
+
+    const voiceChannels =
+      document.getElementById("voiceChannels");
+
+    const messagesContainer =
+      document.getElementById("messages");
+
+    const chatName =
+      document.getElementById("chatName");
+
+    const chatDescription =
+      document.getElementById("chatDescription");
+
+    const headerSymbol =
+      document.getElementById("headerSymbol");
+
     const messageInput =
       document.getElementById("messageInput");
 
-    channels.forEach((channel) => {
-      channel.addEventListener("click", () => {
+    const modalOverlay =
+      document.getElementById("modalOverlay");
 
-        channels.forEach((item) => {
-          item.classList.remove("active");
+    const createChannelForm =
+      document.getElementById("createChannelForm");
+
+    const channelType =
+      document.getElementById("channelType");
+
+    const channelName =
+      document.getElementById("channelName");
+
+    const channelDescription =
+      document.getElementById("channelDescription");
+
+
+    /* =========================================================
+       RENDERIZAR CANAIS
+       ========================================================= */
+
+    function renderChannels() {
+
+      textChannels.innerHTML = "";
+      voiceChannels.innerHTML = "";
+
+      const text =
+        channels.filter(
+          channel => channel.type === "text"
+        );
+
+      const voice =
+        channels.filter(
+          channel => channel.type === "voice"
+        );
+
+
+      if (text.length === 0) {
+
+        textChannels.innerHTML = `
+          <div class="empty-channels">
+            <div class="empty-icon">#</div>
+
+            <strong>Nenhum canal</strong>
+
+            <span>
+              Clique no + para criar seu primeiro canal.
+            </span>
+          </div>
+        `;
+
+      } else {
+
+        text.forEach(channel => {
+          textChannels.appendChild(
+            createChannelElement(channel)
+          );
         });
 
-        channel.classList.add("active");
-
-        const title =
-          channel.dataset.title || channel.textContent.trim();
-
-        const description =
-          channel.dataset.description ||
-          "Canal corporativo para comunicação e colaboração entre equipes.";
-
-        currentChannelName.textContent = title;
-        currentChannelDescription.textContent = description;
-
-        messageInput.placeholder =
-          `Enviar mensagem em #${title}`;
-
-        closeMobileMenu();
-      });
-    });
+      }
 
 
-    /* =========================================================
-       CATEGORIAS EXPANSÍVEIS
-       ========================================================= */
+      if (voice.length === 0) {
 
-    document.querySelectorAll(".category-title").forEach((title) => {
-      title.addEventListener("click", () => {
-        title.parentElement.classList.toggle("collapsed");
-      });
-    });
+        voiceChannels.innerHTML = `
+          <div class="empty-channels">
+            <div class="empty-icon">◉</div>
 
+            <strong>Nenhum canal</strong>
 
-    /* =========================================================
-       ENVIO DE MENSAGEM
-       ========================================================= */
-
-    const messageForm =
-      document.getElementById("messageForm");
-
-    const messages =
-      document.getElementById("messages");
-
-    messageForm.addEventListener("submit", (event) => {
-
-      event.preventDefault();
-
-      const text = messageInput.value.trim();
-
-      if (!text) return;
-
-      const message = document.createElement("article");
-
-      message.className = "message";
-
-      message.innerHTML = `
-        <div class="message-avatar">MP</div>
-
-        <div class="message-body">
-          <div class="message-meta">
-            <span class="message-author">Marcos Paulo</span>
-            <span class="message-role">Você</span>
-            <time class="message-time">Agora</time>
+            <span>
+              Clique no + para criar uma sala.
+            </span>
           </div>
+        `;
 
-          <p class="message-text"></p>
-        </div>
+      } else {
+
+        voice.forEach(channel => {
+          voiceChannels.appendChild(
+            createChannelElement(channel)
+          );
+        });
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ELEMENTO DE CANAL
+       ========================================================= */
+
+    function createChannelElement(channel) {
+
+      const button =
+        document.createElement("button");
+
+      button.className = "channel";
+
+      if (selectedChannel === channel.id) {
+        button.classList.add("active");
+      }
+
+      const icon =
+        channel.type === "text"
+          ? "#"
+          : "◉";
+
+      button.innerHTML = `
+
+        <span class="channel-icon">
+          ${icon}
+        </span>
+
+        <span class="channel-name">
+          ${escapeHtml(channel.name)}
+        </span>
+
+        <span
+          class="channel-delete"
+          title="Excluir canal"
+        >
+          ×
+        </span>
+
       `;
 
-      message.querySelector(".message-text").textContent = text;
 
-      messages.appendChild(message);
+      button.addEventListener("click", (event) => {
 
-      messageInput.value = "";
+        if (
+          event.target.classList.contains(
+            "channel-delete"
+          )
+        ) {
 
-      messages.scrollTo({
-        top: messages.scrollHeight,
-        behavior: "smooth"
+          event.stopPropagation();
+
+          deleteChannel(channel.id);
+
+          return;
+        }
+
+        selectChannel(channel.id);
+
       });
-    });
+
+
+      return button;
+    }
 
 
     /* =========================================================
-       EMOJI
+       SELECIONAR CANAL
+       ========================================================= */
+
+    function selectChannel(id) {
+
+      const channel =
+        channels.find(
+          item => item.id === id
+        );
+
+      if (!channel) return;
+
+      selectedChannel = id;
+
+      chatName.textContent =
+        channel.type === "text"
+          ? "#" + channel.name
+          : "🔊 " + channel.name;
+
+      chatDescription.textContent =
+        channel.description ||
+        "Canal corporativo da Softcom.";
+
+      headerSymbol.textContent =
+        channel.type === "text"
+          ? "#"
+          : "◉";
+
+      messageInput.disabled =
+        channel.type !== "text";
+
+      messageInput.placeholder =
+        channel.type === "text"
+          ? `Enviar mensagem em #${channel.name}`
+          : "Canal de voz selecionado";
+
+      renderMessages();
+
+      renderChannels();
+
+      closeMobileMenu();
+    }
+
+
+    /* =========================================================
+       CRIAR CANAL
+       ========================================================= */
+
+    function openCreateModal(type) {
+
+      modalOverlay.classList.add("active");
+
+      channelType.value = type;
+
+      channelName.value = "";
+      channelDescription.value = "";
+
+      setTimeout(() => {
+        channelName.focus();
+      }, 100);
+
+    }
+
+
+    function closeCreateModal() {
+
+      modalOverlay.classList.remove("active");
+
+    }
+
+
+    createChannelForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        const name =
+          channelName.value
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+
+        if (!name) return;
+
+
+        const alreadyExists =
+          channels.some(
+            channel =>
+              channel.name === name &&
+              channel.type === channelType.value
+          );
+
+
+        if (alreadyExists) {
+
+          alert(
+            "Já existe um canal com esse nome."
+          );
+
+          return;
+        }
+
+
+        const newChannel = {
+
+          id:
+            Date.now().toString(),
+
+          name,
+
+          type:
+            channelType.value,
+
+          description:
+            channelDescription.value.trim(),
+
+          createdAt:
+            new Date().toISOString()
+
+        };
+
+
+        channels.push(newChannel);
+
+        saveChannels();
+
+        closeCreateModal();
+
+        renderChannels();
+
+        selectChannel(newChannel.id);
+
+      }
+    );
+
+
+    /* =========================================================
+       EXCLUIR CANAL
+       ========================================================= */
+
+    function deleteChannel(id) {
+
+      const channel =
+        channels.find(
+          item => item.id === id
+        );
+
+      if (!channel) return;
+
+
+      const confirmDelete =
+        confirm(
+          `Deseja excluir o canal "${channel.name}"?`
+        );
+
+
+      if (!confirmDelete) return;
+
+
+      channels =
+        channels.filter(
+          item => item.id !== id
+        );
+
+
+      delete messages[id];
+
+      saveChannels();
+      saveMessages();
+
+
+      if (selectedChannel === id) {
+
+        selectedChannel = null;
+
+        chatName.textContent =
+          "Nenhum canal selecionado";
+
+        chatDescription.textContent =
+          "Crie ou selecione um canal para começar.";
+
+        headerSymbol.textContent = "#";
+
+        messageInput.disabled = true;
+
+        messageInput.placeholder =
+          "Selecione um canal para enviar uma mensagem";
+
+        renderEmptyChat();
+
+      }
+
+
+      renderChannels();
+
+    }
+
+
+    /* =========================================================
+       MENSAGENS
+       ========================================================= */
+
+    function renderMessages() {
+
+      if (!selectedChannel) {
+
+        renderEmptyChat();
+
+        return;
+      }
+
+
+      const channelMessages =
+        messages[selectedChannel] || [];
+
+
+      messagesContainer.innerHTML = "";
+
+
+      if (channelMessages.length === 0) {
+
+        messagesContainer.innerHTML = `
+
+          <div class="empty-chat">
+
+            <div class="empty-chat-box">
+
+              <div class="empty-chat-icon">
+                #
+              </div>
+
+              <h1>
+                Início do canal
+              </h1>
+
+              <p>
+                Este canal ainda não possui mensagens.
+                Seja o primeiro a enviar uma mensagem.
+              </p>
+
+            </div>
+
+          </div>
+
+        `;
+
+        return;
+      }
+
+
+      channelMessages.forEach(message => {
+
+        const article =
+          document.createElement("article");
+
+        article.className = "message";
+
+        article.innerHTML = `
+
+          <div class="message-avatar">
+            MP
+          </div>
+
+          <div class="message-content">
+
+            <div class="message-meta">
+
+              <span class="message-author">
+                Marcos Paulo
+              </span>
+
+              <time class="message-time">
+                ${message.time}
+              </time>
+
+            </div>
+
+            <p class="message-text">
+              ${escapeHtml(message.text)}
+            </p>
+
+          </div>
+
+        `;
+
+        messagesContainer.appendChild(article);
+
+      });
+
+
+      messagesContainer.scrollTop =
+        messagesContainer.scrollHeight;
+    }
+
+
+    function renderEmptyChat() {
+
+      messagesContainer.innerHTML = `
+
+        <div class="empty-chat">
+
+          <div class="empty-chat-box">
+
+            <div class="empty-chat-icon">
+              #
+            </div>
+
+            <h1>
+              Sua comunicação começa aqui
+            </h1>
+
+            <p>
+              Nenhum canal foi cadastrado ainda.
+              Utilize o botão <strong>+</strong> ao lado de
+              "Canais de texto" ou "Canais de voz"
+              para criar o primeiro canal da sua empresa.
+            </p>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       ENVIAR MENSAGEM
        ========================================================= */
 
     document
-      .getElementById("emojiButton")
-      .addEventListener("click", () => {
+      .getElementById("messageForm")
+      .addEventListener(
+        "submit",
+        function(event) {
 
-        const emojis = ["😀", "👍", "🚀", "🎉", "👏", "💙"];
-        const emoji =
-          emojis[Math.floor(Math.random() * emojis.length)];
+          event.preventDefault();
 
-        messageInput.value += emoji;
-        messageInput.focus();
-      });
+          if (!selectedChannel) return;
+
+          const channel =
+            channels.find(
+              item => item.id === selectedChannel
+            );
+
+          if (!channel) return;
+
+          if (channel.type !== "text") return;
+
+
+          const text =
+            messageInput.value.trim();
+
+          if (!text) return;
+
+
+          if (!messages[selectedChannel]) {
+            messages[selectedChannel] = [];
+          }
+
+
+          const now =
+            new Date();
+
+
+          messages[selectedChannel].push({
+
+            text,
+
+            time:
+              now.toLocaleTimeString(
+                "pt-BR",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }
+              )
+
+          });
+
+
+          saveMessages();
+
+          messageInput.value = "";
+
+          renderMessages();
+
+        }
+      );
 
 
     /* =========================================================
-       STATUS DO USUÁRIO
+       STORAGE
        ========================================================= */
 
-    const statusButton =
-      document.getElementById("statusButton");
+    function saveChannels() {
 
-    const statusMenu =
-      document.getElementById("statusMenu");
+      localStorage.setItem(
+        "softcom_channels",
+        JSON.stringify(channels)
+      );
 
-    statusButton.addEventListener("click", () => {
-      statusMenu.classList.toggle("open");
-    });
-
-    document.querySelectorAll(".status-option").forEach((option) => {
-
-      option.addEventListener("click", () => {
-
-        const status =
-          option.dataset.status;
-
-        const colors = {
-          online: "var(--success)",
-          busy: "var(--danger)",
-          away: "var(--warning)"
-        };
-
-        statusButton.style.color = colors[status];
-
-        statusMenu.classList.remove("open");
-      });
-
-    });
-
-
-    /* =========================================================
-       MENU MOBILE
-       ========================================================= */
-
-    const mobileMenu =
-      document.getElementById("mobileMenu");
-
-    const channelsSidebar =
-      document.getElementById("channelsSidebar");
-
-    const mobileOverlay =
-      document.getElementById("mobileOverlay");
-
-    function openMobileMenu() {
-      channelsSidebar.classList.add("mobile-open");
-      mobileOverlay.classList.add("visible");
     }
+
+
+    function saveMessages() {
+
+      localStorage.setItem(
+        "softcom_messages",
+        JSON.stringify(messages)
+      );
+
+    }
+
+
+    /* =========================================================
+       SEGURANÇA
+       ========================================================= */
+
+    function escapeHtml(text) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent = text;
+
+      return div.innerHTML;
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    function toggleMobileMenu() {
+
+      document
+        .getElementById("channelsSidebar")
+        .classList.toggle("open");
+
+    }
+
 
     function closeMobileMenu() {
-      channelsSidebar.classList.remove("mobile-open");
-      mobileOverlay.classList.remove("visible");
+
+      document
+        .getElementById("channelsSidebar")
+        .classList.remove("open");
+
     }
 
-    mobileMenu.addEventListener("click", openMobileMenu);
 
-    mobileOverlay.addEventListener("click", closeMobileMenu);
+    /* =========================================================
+       FECHAR MODAL CLICANDO FORA
+       ========================================================= */
+
+    modalOverlay.addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target === modalOverlay
+        ) {
+          closeCreateModal();
+        }
+
+      }
+    );
 
 
     /* =========================================================
-       FECHAR MENUS AO CLICAR FORA
+       INICIALIZAÇÃO
        ========================================================= */
 
-    document.addEventListener("click", (event) => {
+    renderChannels();
 
-      if (
-        !statusMenu.contains(event.target) &&
-        !statusButton.contains(event.target)
-      ) {
-        statusMenu.classList.remove("open");
-      }
+    renderEmptyChat();
 
-    });
-
-
-    /* =========================================================
-       TECLA ESC
-       ========================================================= */
-
-    document.addEventListener("keydown", (event) => {
-
-      if (event.key === "Escape") {
-        closeMobileMenu();
-        statusMenu.classList.remove("open");
-      }
-
-    });
   </script>
 
 </body>
